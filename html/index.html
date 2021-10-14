@@ -1,45 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/css.css" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"
-    ></script>
 
-    <script type="module" src="../js/scripts.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/css.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 
-    <title>Proyecto</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
-      <a class="navbar-brand" href="#">Proyecto</a>
-      
-      <div class="collapse navbar-collapse pl-5 " id="navbarNavDropdown" >
-        <ul class="navbar-nav d-flex w-50">
+  <script type="module" src="../js/scripts.js"></script>
+
+  <title>Proyecto</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Proyecto</a>
+    <div class="collapse navbar-collapse pl-5" id="navbarNavDropdown">
+      <div class="w-25">
+        <ul class="navbar-nav d-flex w-100">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Home
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Home
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" href="#">Action</a>
@@ -47,48 +39,55 @@
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
-
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-          </li>
+        </ul>
+      </div>
+      <div class="w-50">
+        <ul class="navbar-nav d-flex w-100">
           <li class="nav-item w-100">
             <form class="form-inline">
-              <input class="form-control mr-sm-2 w-100" type="search" placeholder="Search" aria-label="Search">
+              <input class="form-control mr-sm-2 w-100" type="search" placeholder="Search" aria-label="Search" />
             </form>
           </li>
         </ul>
       </div>
-
-      <div class="dropdown align-items-start">
-        <button
-          class="btn btn-secondary bg-dark dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-         NickName
-        </button>
-        <div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 ">
-                <input
-                  type="search"
-                  class="form-control form-control-dark "
-                  placeholder="Search..."
-                  aria-label="Search"
-                />
-              </form>
-          <a class="dropdown-item" href="#">Lista Paginas</a>
-        </div>
+      <div class="w-25 d-flex">
+        <ul class="navbar-nav d-flex w-100 justify-content-end">
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#">Create Post</a>
+          </li>
+          <li class="divider"></li>
+        </ul>
       </div>
-    </nav>
-  
-  </body>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        NickName
+      </button>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Profile</a>
+        <a class="dropdown-item" href="#">Settings</a>
+
+        <a class="dropdown-item" href="#">Log Out</a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="container"> </div>
+
+
+</body>
+
+<!-- 
+    
+    
+    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+            <input
+              type="search"
+              class="form-control form-control-dark"
+              placeholder="Search..."
+              aria-label="Search"
+            />
+          </form>-->
+
 </html>

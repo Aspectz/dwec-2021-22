@@ -1,3 +1,21 @@
-import {a} from './pepe.js';
+import {Login} from './login.js';
 
-document.addEventListener("DOMContentLoaded",e=>a());
+(()=>{
+    function login(container){
+        let login=new Login();
+        login.renderLogin(container);
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded",function(){
+        let container=document.querySelector("#container");
+        login(container);
+        console.log("a");
+    });
+})();
+
+
+
+
+
