@@ -15,7 +15,6 @@ import {Main} from './main.js';
     document.addEventListener("DOMContentLoaded",function(){
         let container=document.querySelector("#container");
         main(container);
-        console.log("a");
     });
 })();
 
