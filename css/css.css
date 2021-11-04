@@ -1,3 +1,53 @@
-#juan{
-    position: relative;
+.mainContainer{
+    display:flex;
+    justify-content: center;
+    flex-direction: row;
+    background-color: #030303;
+    margin:0 auto;
+    padding:20px 24px;
+}
+
+.containerPosts{
+    display: flex;
+    flex-direction: column;
+    width:640px;
+    
+}
+.divPost{
+    display:block;
+    color:#77797a;
+    margin: 10px;
+    background-color: #1a1a1b;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.postAuthor{
+    /*color:rgba(255, 255, 255, 0.5);*/
+    color:#77797a;
+}
+.postTitle{   
+    color: white;
+}
+.postBody{
+    display:flex;
+    flex-direction: row;
+    justify-content:center;
+}
+.divCommentsBtn:hover{
+    background-color: #2d2d2f;
+}
+.divCommentsBtn{
+    padding:8px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.iconComment{
+    content: url("/js/chat-bubble.png");
+    width: 20px;
+    height: 20px;
+    
 }
