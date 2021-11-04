@@ -13,6 +13,11 @@
     width:640px;
     
 }
+.div{
+    display: flex;
+    flex-direction: row;
+
+}
 .divPost{
     display:block;
     color:#77797a;
