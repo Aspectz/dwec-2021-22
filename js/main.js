@@ -23,7 +23,7 @@ async function getPosts(){
   //Right Aside bar
   let divAsideRight=document.createElement("div");
   let h1Aside=document.createElement("h1");
-  divAsideRight.classList.add("divPost");
+  divAsideRight.classList.add("divRightAside");
   h1Aside.innerHTML="Aside here";
   divAsideRight.append(h1Aside);
   

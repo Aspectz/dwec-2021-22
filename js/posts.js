@@ -5,27 +5,27 @@ class Post{
     }
     renderPost(container){
       
-      let div=document.createElement("div");
-      div.classList.add("div");
-
+      let divExt=document.createElement("div");
+      divExt.classList.add("divExt");
 
       let divPost=document.createElement("div");
       divPost.classList.add("divPost");
 
-      div.append(divPost);
+      divExt.append(divPost);
       //Left bar
       let leftDivVotes=document.createElement("div");
-      let p1=document.createElement("p");
-      p1.innerHTML="p1";
+      leftDivVotes.classList.add("leftDivVotes")
+      let upVote=document.createElement("p");
+      upVote.classList.add("iconUpVote");
       let p2=document.createElement("p");
-      p2.innerHTML="p2";
-      let p3=document.createElement("p");
-      p3.innerHTML="p3";
-      leftDivVotes.append(p1);
+      p2.innerHTML=this.data.upvotes;
+      let downVote=document.createElement("p");
+      downVote.classList.add("iconDownVote")
+      leftDivVotes.append(upVote);
       leftDivVotes.append(p2);
-      leftDivVotes.append(p3);
+      leftDivVotes.append(downVote);
 
-      divPost.append(leftDivVotes);
+      divExt.append(leftDivVotes);
       //Author
       let divPostAuthor=document.createElement("div");
       let author=document.createElement("h6");
@@ -46,7 +46,7 @@ class Post{
       let divPostBody=document.createElement("div");
       divPostBody.classList.add("postBody");
       let file=document.createElement("img");
-      file.style="width:100%";
+      file.style="max-width:100%";
       file.src=this.data.file;
       divPostBody.append(file);
 
@@ -72,8 +72,10 @@ class Post{
       divPost.append(divPostTitle);
       divPost.append(divPostBody);
       divPost.append(divPostBottom);
-      container.append(divPost);
+      divExt.append(divPost);
+      container.append(divExt);
 
     }
+    
 
 }

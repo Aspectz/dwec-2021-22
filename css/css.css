@@ -21,15 +21,50 @@
 .divPost{
     display:block;
     color:#77797a;
-    margin: 10px;
+    width: 100%;
     background-color: #1a1a1b;
+    padding: 10px;
+}
+.divExt{
+    display: flex;
+    color:#77797a;
+    margin: 0px 10px 10px 0px;
+    background-color: #161617;
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 3px;
+}
+.divExt:hover{
+    border: 1px solid rgba(255,255,255,0.5);
+}
+.divRightAside{
+    display:block;
+    color:#77797a;
+    background-color: #1a1a1b;
     padding: 10px;
+}
+.leftDivVotes{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    max-width: 26px;
+    color: white;
+}
+.iconDownVote{
+    content: url("/dwec-2021-22/js/arrow-down-sign-to-navigate.png");
+}
+.iconUpVote{
+    content: url("/dwec-2021-22/js/up-arrow.png");
+}
+.iconComment{
+    content: url("/dwec-2021-22/js/chat-bubble.png");
+    width: 30px;
+    padding-right: 5px;
+    height: 24px;
+    
 }
 
 .postAuthor{
-    /*color:rgba(255, 255, 255, 0.5);*/
     color:#77797a;
 }
 .postTitle{   
@@ -46,13 +81,8 @@
 .divCommentsBtn{
     padding:8px;
     margin-top: 5px;
+    border-radius: 2px;
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-.iconComment{
-    content: url("/js/chat-bubble.png");
-    width: 20px;
-    height: 20px;
-    
 }
