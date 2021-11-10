@@ -51,13 +51,13 @@
     color: white;
 }
 .iconDownVote{
-    content: url("/dwec-2021-22/js/arrow-down-sign-to-navigate.png");
+    content: url("/js/arrow-down-sign-to-navigate.png");
 }
 .iconUpVote{
-    content: url("/dwec-2021-22/js/up-arrow.png");
+    content: url("/js/up-arrow.png");
 }
 .iconComment{
-    content: url("/dwec-2021-22/js/chat-bubble.png");
+    content: url("/js/chat-bubble.png");
     width: 30px;
     padding-right: 5px;
     height: 24px;
