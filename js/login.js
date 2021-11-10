@@ -3,6 +3,7 @@ export{Login};
 class Login{
     constructor(){}
     renderLogin(container){
+      container.classList.remove("mainContainer");
         container.innerHTML=`<section class="vh-100 bg-light">
         <div class="container-fluid h-custom">
           <div class="row d-flex justify-content-center align-items-center h-100">
@@ -35,7 +36,7 @@ class Login{
                 </div>
       
                 <div class="text-center text-lg-start mt-4 pt-2">
-                  <button type="button" class="btn btn-primary btn-lg"
+                  <button type="submit" id="login_submit" class="btn btn-primary btn-lg"
                     style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
                   <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
                       class="link-danger">Register</a></p>
@@ -47,9 +48,12 @@ class Login{
         </div>
       </section>`;
 
+      document.querySelector("#login_submit").addEventListener("click",(e)=>{this.loginSubmit(e) })
     }
 
-
+    loginSubmit(event){
+      event.preventDefault();
+    }
 }
 
 
