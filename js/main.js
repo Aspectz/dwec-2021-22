@@ -1,6 +1,10 @@
 export { Main };
 import {Post} from "./posts.js";
 import{pokemons} from "./pokemones.js";
+
+
+
+
 class Main {
   constructor(container) {}
   renderMain() {
