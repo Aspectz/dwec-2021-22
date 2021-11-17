@@ -51,13 +51,13 @@
     color: white;
 }
 .iconDownVote{
-    content: url("/js/arrow-down-sign-to-navigate.png");
+    content: url("./img/arrow-down-sign-to-navigate.png");
 }
 .iconUpVote{
-    content: url("/js/up-arrow.png");
+    content: url("./img/up-arrow.png");
 }
 .iconComment{
-    content: url("/js/chat-bubble.png");
+    content: url("./img/chat-bubble.png");
     width: 30px;
     padding-right: 5px;
     height: 24px;
