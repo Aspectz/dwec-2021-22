@@ -80,9 +80,9 @@ class Register{
           })
           .then((data) => {
             console.log(data);
-            //localStorage.setItem("IDToken",data.idToken);
-            //localStorage.setItem("email",data.email);
-            //document.querySelector("#dropdownMenuButton").innerHTML=localStorage.getItem("email");
+            localStorage.setItem("IDToken",data.idToken);
+            localStorage.setItem("email",data.email);
+            document.querySelector("#dropdownMenuButton").innerHTML=localStorage.getItem("email");
           })
           .catch((error) => {
             console.error("Error;", error);

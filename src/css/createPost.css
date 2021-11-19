@@ -1,0 +1,25 @@
+
+.containerCreatePosts{
+    display: flex;
+    flex-direction: column;
+    width:640px;
+    background-color: #1a1a1b;
+    padding: 10px;
+    border:1px dotted rgba(255, 255, 255, 0.39);
+}
+.postNameDiv{
+    border:1px solid white;
+}
+.postNameDiv input[type="text"]{
+    background-color: transparent;
+    border:none;
+    color:white;
+    width: 100%;
+}
+.postNameDiv input[type="text"]::placeholder{
+    padding-left: 2px;
+}
+.postFileDiv{
+    border:1px solid white;
+    height: 250px;
+}
