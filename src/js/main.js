@@ -14,11 +14,10 @@ class Main {
 }
 
 async function getPosts(container){
-  console.log(container);
   let resp=await fetch("https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/posts.json");
   let data=await resp.json();
   let posts=data;
-  
+  container.innerHTML="";
   container.classList.add("mainContainer");
 
   //Container where all posts are showed to user

@@ -1,10 +1,11 @@
-export{Login};
-
-class Login{
-    constructor(){}
-    renderLogin(container){
-      container.classList.remove("mainContainer");
-        container.innerHTML=`<section class="vh-100 bg-light">
+import { Main } from "./main";
+import { Menu } from "./topmenu";
+export { Login };
+class Login {
+  constructor() {}
+  renderLogin(container) {
+    container.classList.remove("mainContainer");
+    container.innerHTML = `<section class="vh-100 bg-light">
         <div class="container-fluid h-custom">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-md-8 col-lg-6 col-xl-4">
@@ -47,50 +48,52 @@ class Login{
           </div>
         </div>
       </section>`;
-      console.log(localStorage);
-      document.querySelector("#form_login").addEventListener("submit",(e)=>{this.loginSubmit(e) })
-    }
+    console.log(localStorage);
+    document.querySelector("#form_login").addEventListener("submit", (e) => {
+      this.loginSubmit(e);
+    });
+  }
 
-    loginSubmit(event){
+  loginSubmit(event) {
+    let formData = new FormData(document.querySelector("#form_login"));
+    let objectFormData = Object.fromEntries(formData);
+    objectFormData.returnSecureToken = true;
+    delete objectFormData.remember;
+    let datos = JSON.stringify(objectFormData);
 
-      
-
-      let formData=new FormData(document.querySelector("#form_login"));
-      let objectFormData=Object.fromEntries(formData);
-      objectFormData.returnSecureToken = true;
-      delete  objectFormData.remember;
-      let datos=JSON.stringify(objectFormData);
-
-      fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCQfKFKhNmRnUKNFUXRxIpywZct5hclFCM",{
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCQfKFKhNmRnUKNFUXRxIpywZct5hclFCM",
+      {
         method: "post",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
         body: datos,
       }
-      ).then((response)=>{
-        if(response.ok){
-            return response.json();
-        }else{
-          return response.json().then((text)=>{
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.json().then((text) => {
             throw new Error(text.error.message);
-          })
+          });
         }
-      }).then((datos)=>{
-        localStorage.setItem("IDToken",datos.idToken);
-        localStorage.setItem("email",datos.email);
-        document.querySelector("#dropdownMenuButton").innerHTML=localStorage.getItem("email");
+      })
+      .then((datos) => {
+        localStorage.setItem("IDToken", datos.idToken);
+        localStorage.setItem("email", datos.email);
+        localStorage.setItem("nickname", datos.displayName);
 
-      }).catch((error)=>{
+        let menu = new Menu();
+        menu.getMenu();
+        let main = new Main(document.querySelector("#container"));
+        main.renderMain();
+      })
+      .catch((error) => {
         console.error(error);
-
       });
-    
-      event.preventDefault();
-    }
+
+    event.preventDefault();
+  }
 }
-
-
-
-
-

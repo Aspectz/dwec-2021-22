@@ -1,32 +1,44 @@
-export {Register};
-class Register{
-
-    constructor(){}
-        renderRegister(container){
-            container.classList.remove("mainContainer");
-              container.innerHTML=`<section class="vh-100 bg-light">
+import { Main } from "./main";
+import { Menu } from "./topmenu";
+export { Register };
+class Register {
+  constructor(container) {
+    this.container = container;
+  }
+  renderRegister(error) {
+    container.classList.remove("mainContainer");
+    container.innerHTML = `<section class="vh-100 bg-light">
               <div class="container-fluid h-custom">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                   <div class="col-md-8 col-lg-6 col-xl-4">
                     <form id="form_register">
-            
-                      <!-- Email input -->
                       <div class="form-outline mb-4 mt-5">
+                      <label class="form-label" for="email">NickName</label>
+                      <input type="text" name="nickname" id="nickname" class="form-control form-control-lg"
+                        placeholder="Choose a nickname" />
+                        <div id="nickerror"></div>
+                      
+                    </div>
+                      <!-- Email input -->
+                      <div class="form-outline mb-4">
+                      <label class="form-label" for="email">Email address</label>
                         <input type="email" name="email" class="form-control form-control-lg"
                           placeholder="Enter a valid email address" />
-                        <label class="form-label" for="email">Email address</label>
+                       
                       </div>
             
                       <!-- Password input -->
                       <div class="form-outline mb-3">
+                      <label class="form-label" id="passwordLabel" for="password">Password</label>
                         <input type="password" name="password" id="password" class="form-control form-control-lg"
                           placeholder="Enter password" />
-                        <label class="form-label" id="passwordLabel" for="password">Password</label>
+                       
                       </div>
                       <div class="form-outline mb-3">
+                      <label class="form-label" for="password2">Password</label>
                         <input type="password" name="password2" id="password2" class="form-control form-control-lg"
                           placeholder="Enter password" />
-                        <label class="form-label" for="password2">Password</label>
+                        
                       </div>
                       <div class="text-center text-lg-start mt-4 pt-2">
                         <button type="submit"  class="btn btn-primary btn-lg"
@@ -39,55 +51,92 @@ class Register{
                 </div>
               </div>
             </section>`;
-      
-            document.querySelector("#form_register").addEventListener("submit",(e)=>{
-              this.registerSubmit(e);
-            }); 
-          }
 
-          
+    document.querySelector("#form_register").addEventListener("submit", (e) => {
+      this.registerSubmit(e);
+    });
+  }
 
-        registerSubmit(event){
-          event.preventDefault();
-          let passwd1=document.getElementById("password");
-          let passwd2=document.getElementById("password2");
-          if(passwd1.value!=passwd2.value){
-            document.querySelector("#passwordLabel").innerHTML="Las contraseñas deben coincidir";
-            return;
-          }
+   async registerSubmit(event) {
+    event.preventDefault();
+    let creado=false;
+    let passwd1 = document.getElementById("password");
+    let passwd2 = document.getElementById("password2");
+    let nickname=document.getElementById("nickname");
+    if (passwd1.value != passwd2.value) {
+      document.querySelector("#passwordLabel").innerHTML =
+        "Las contraseñas deben coincidir";
+      return;
+    }
+    //Check nickname
+    let resp=await fetch("https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json");
+    let data=await resp.json();
+    let users=Object.entries(data);
+    console.log(users);
+    users.map(p=>{
+      if(p[1].nickname==nickname.value){
+        document.querySelector("#nickerror").innerHTML =
+        "Usuario ya creado";
+        creado=true;
+        return;
+      }
+    });
 
-          let datosFormData=new FormData(document.querySelector("#form_register"));
-          let objecteFormData=Object.fromEntries(datosFormData);
-          delete objecteFormData.password2;
-          objecteFormData.returnSecureToken = true;
-          let datos=JSON.stringify(objecteFormData);
-          
-          fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCQfKFKhNmRnUKNFUXRxIpywZct5hclFCM",{
-            method:"post",
-            headers:{
-              "Content-type":"application/json;charset=UTF-8",
-            },
-            body:datos,
-          }).then((response)=>{
+    if(creado)return;
 
-            if (response.ok) return response.json();
-            else {
-              return response.json().then((text) => {
-                console.log(text);
-                throw new Error(text.error.message);
-              });
-            }
-          })
-          .then((data) => {
-            console.log(data);
-            localStorage.setItem("IDToken",data.idToken);
-            localStorage.setItem("email",data.email);
-            document.querySelector("#dropdownMenuButton").innerHTML=localStorage.getItem("email");
-          })
-          .catch((error) => {
-            console.error("Error;", error);
-          });
-          
+    //Create user
+    let datosFormData = new FormData(document.querySelector("#form_register"));
+    let objecteFormData = Object.fromEntries(datosFormData);
+    delete objecteFormData.password2;
+    objecteFormData.displayName=objecteFormData.nickname;
+    delete objecteFormData.nickname;
+    objecteFormData.returnSecureToken = true;
+    let datos = JSON.stringify(objecteFormData);
 
+      await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCQfKFKhNmRnUKNFUXRxIpywZct5hclFCM",
+        {
+          method: "post",
+          headers: {
+            "Content-type": "application/json;charset=UTF-8",
+          },
+          body: datos,
         }
-}
+      )
+        .then((response) => {
+          if (response.ok) return response.json();
+          else {
+            return response.json().then((text) => {
+              throw new Error(text.error.message);
+            });
+          }
+        })
+        .then((data) => {
+          localStorage.setItem("IDToken", data.idToken);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("nickname", data.displayName);
+        })
+        .catch((error) => {
+          console.error("Error;", error);
+        });
+      
+        delete datos.password;
+        delete datos.returnSecureToken;
+        fetch("https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json",{
+          method:"post",
+          headers: {
+            "Content-type": "application/json;charset=UTF-8",
+          },
+          body: datos,
+        }).then((response)=>{return response.json()}).
+        then(()=>{
+          let menu = new Menu();
+          menu.getMenu();
+          let main = new Main(document.querySelector("#container"));
+          main.renderMain();
+        })
+
+    }
+   
+    
+  }
