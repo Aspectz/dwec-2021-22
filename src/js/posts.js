@@ -4,28 +4,35 @@ class Post{
         this.data=data;
     }
     renderPost(container){
-      
-      let divExt=document.createElement("div");
+
+
+      container.innerHTML+=`<div class="divExt"><div class="leftDivVotes"><p class="iconUpVote"></p><p>${this.data.upvotes}</p><p class="iconDownVote"></p></div><div class="divPost"><div class="postAuthor"><h6>Posted by ${this.data.author}</h6></div><div class="postTitle"><h3 style="font-size: 1.17em;">${this.data.title}</h3></div><div class="postBody"><img style="max-width: 100%;" src="${this.data.file}"></div><div style="display: flex;"><div class="divCommentsBtn""><i class="iconComment"></i><span>${this.data.comments} Comments</span></div></div></div></div>`;
+
+      console.log("HOLA");
+
+      /*let divExt=document.createElement("div");
       divExt.classList.add("divExt");
 
       let divPost=document.createElement("div");
       divPost.classList.add("divPost");
-
       divExt.append(divPost);
       //Left bar
       let leftDivVotes=document.createElement("div");
       leftDivVotes.classList.add("leftDivVotes")
       let upVote=document.createElement("p");
       upVote.classList.add("iconUpVote");
+
       let p2=document.createElement("p");
       p2.innerHTML=this.data.upvotes;
       let downVote=document.createElement("p");
       downVote.classList.add("iconDownVote")
+      
       leftDivVotes.append(upVote);
       leftDivVotes.append(p2);
       leftDivVotes.append(downVote);
 
       divExt.append(leftDivVotes);
+
       //Author
       let divPostAuthor=document.createElement("div");
       let author=document.createElement("h6");
@@ -74,8 +81,9 @@ class Post{
       divPost.append(divPostBottom);
       divExt.append(divPost);
       container.append(divExt);
-
+     */
+      
     }
-    
 
 }
+

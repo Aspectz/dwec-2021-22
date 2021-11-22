@@ -72,7 +72,6 @@ class Register {
     let resp=await fetch("https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json");
     let data=await resp.json();
     let users=Object.entries(data);
-    console.log(users);
     users.map(p=>{
       if(p[1].nickname==nickname.value){
         document.querySelector("#nickerror").innerHTML =
@@ -92,6 +91,8 @@ class Register {
     delete objecteFormData.nickname;
     objecteFormData.returnSecureToken = true;
     let datos = JSON.stringify(objecteFormData);
+
+    
 
       await fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCQfKFKhNmRnUKNFUXRxIpywZct5hclFCM",
@@ -119,15 +120,20 @@ class Register {
         .catch((error) => {
           console.error("Error;", error);
         });
-      
-        delete datos.password;
-        delete datos.returnSecureToken;
+
+        //Registrar usuario bda
+
+        let userFormData= Object.fromEntries(datosFormData)
+        delete userFormData.password2;
+        delete userFormData.password;
+        let userDatos=JSON.stringify(userFormData);
+
         fetch("https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json",{
           method:"post",
           headers: {
             "Content-type": "application/json;charset=UTF-8",
           },
-          body: datos,
+          body: userDatos,
         }).then((response)=>{return response.json()}).
         then(()=>{
           let menu = new Menu();

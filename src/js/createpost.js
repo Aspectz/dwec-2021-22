@@ -79,7 +79,7 @@ async function uploadPost(container) {
       console.log("Working");
 
       let menu = new Menu();
-      menu.getLoggedMenu();
+      menu.getMenu();
       let main = new Main(document.querySelector("#container"));
       main.renderMain();
     });

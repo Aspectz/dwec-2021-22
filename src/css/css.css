@@ -19,6 +19,7 @@
 
 }
 .divPost{
+    cursor: pointer;
     display:block;
     color:#77797a;
     width: 100%;

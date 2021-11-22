@@ -35,6 +35,7 @@ async function getPosts(container){
 
 
   for(let post in posts){
+    posts[post].id=post;
     let newPost=new Post(posts[post]);
     newPost.renderPost(divPosts);
   }
