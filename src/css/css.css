@@ -53,10 +53,21 @@
 }
 .iconDownVote{
     content: url("../img/arrow-down-sign-to-navigate.png");
+    cursor: pointer;
 }
 .iconUpVote{
     content: url("../img/up-arrow.png");
+    cursor: pointer;
 }
+.iconDownVoted{
+  content: url("../img/down-arrow-voted.png");
+  cursor: pointer;
+}
+.iconUpVoted{
+  content: url("../img/up-arrow-voted.png");
+  cursor: pointer;
+}
+
 .iconComment{
     content: url("../img/chat-bubble.png");
     width: 30px;

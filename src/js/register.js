@@ -114,38 +114,38 @@ class Register {
         }
       })
       .then((data) => {
-        localStorage.setItem("IDToken", data.idToken);
+        localStorage.setItem("localId", data.localId);
         localStorage.setItem("email", data.email);
         localStorage.setItem("nickname", data.displayName);
+
+        //Registrar usuario bda
+        let userFormData = Object.fromEntries(datosFormData);
+        delete userFormData.password2;
+        delete userFormData.password;
+        let userDatos = JSON.stringify(userFormData);
+
+        fetch(
+          `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${data.localId}/.json`,
+          {
+            method: "put",
+            headers: {
+              "Content-type": "application/json;charset=UTF-8",
+            },
+            body: userDatos,
+          }
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then(() => {
+            let menu = new Menu();
+            menu.getMenu();
+            let main = new Main(document.querySelector("#container"));
+            main.renderMain();
+          });
       })
       .catch((error) => {
         console.error("Error;", error);
-      });
-
-    //Registrar usuario bda
-    let userFormData = Object.fromEntries(datosFormData);
-    delete userFormData.password2;
-    delete userFormData.password;
-    let userDatos = JSON.stringify(userFormData);
-
-    fetch(
-      "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json",
-      {
-        method: "post",
-        headers: {
-          "Content-type": "application/json;charset=UTF-8",
-        },
-        body: userDatos,
-      }
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then(() => {
-        let menu = new Menu();
-        menu.getMenu();
-        let main = new Main(document.querySelector("#container"));
-        main.renderMain();
       });
   }
 }

@@ -82,7 +82,7 @@ class Login {
       })
       .then((datos) => {
         console.log(datos);
-        localStorage.setItem("IDToken", datos.idToken);
+        localStorage.setItem("localId", datos.localId);
         localStorage.setItem("email", datos.email);
         localStorage.setItem("nickname", datos.displayName);
 
