@@ -57,92 +57,95 @@ class Register {
     });
   }
 
-   async registerSubmit(event) {
+  async registerSubmit(event) {
     event.preventDefault();
-    let creado=false;
+    let creado = false;
     let passwd1 = document.getElementById("password");
     let passwd2 = document.getElementById("password2");
-    let nickname=document.getElementById("nickname");
+    let nickname = document.getElementById("nickname");
     if (passwd1.value != passwd2.value) {
       document.querySelector("#passwordLabel").innerHTML =
         "Las contraseñas deben coincidir";
       return;
     }
     //Check nickname
-    let resp=await fetch("https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json");
-    let data=await resp.json();
-    let users=Object.entries(data);
-    users.map(p=>{
-      if(p[1].nickname==nickname.value){
-        document.querySelector("#nickerror").innerHTML =
-        "Usuario ya creado";
-        creado=true;
-        return;
-      }
-    });
+    let resp = await fetch(
+      "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json"
+    );
+    let data = await resp.json();
+    if (data != null) {
+      let users = Object.entries(data);
+      users.map((p) => {
+        if (p[1].nickname == nickname.value) {
+          document.querySelector("#nickerror").innerHTML = "Usuario ya creado";
+          creado = true;
+          return;
+        }
+      });
+    }
 
-    if(creado)return;
+    if (creado) return;
 
     //Create user
     let datosFormData = new FormData(document.querySelector("#form_register"));
     let objecteFormData = Object.fromEntries(datosFormData);
     delete objecteFormData.password2;
-    objecteFormData.displayName=objecteFormData.nickname;
+    objecteFormData.displayName = objecteFormData.nickname;
     delete objecteFormData.nickname;
     objecteFormData.returnSecureToken = true;
     let datos = JSON.stringify(objecteFormData);
 
-    
-
-      await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCQfKFKhNmRnUKNFUXRxIpywZct5hclFCM",
-        {
-          method: "post",
-          headers: {
-            "Content-type": "application/json;charset=UTF-8",
-          },
-          body: datos,
+    await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCQfKFKhNmRnUKNFUXRxIpywZct5hclFCM",
+      {
+        method: "post",
+        headers: {
+          "Content-type": "application/json;charset=UTF-8",
+        },
+        body: datos,
+      }
+    )
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          return response.json().then((text) => {
+            throw new Error(text.error.message);
+          });
         }
-      )
-        .then((response) => {
-          if (response.ok) return response.json();
-          else {
-            return response.json().then((text) => {
-              throw new Error(text.error.message);
-            });
-          }
-        })
-        .then((data) => {
-          localStorage.setItem("IDToken", data.idToken);
-          localStorage.setItem("email", data.email);
-          localStorage.setItem("nickname", data.displayName);
-        })
-        .catch((error) => {
-          console.error("Error;", error);
-        });
+      })
+      .then((data) => {
+        localStorage.setItem("IDToken", data.idToken);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("nickname", data.displayName);
+      })
+      .catch((error) => {
+        console.error("Error;", error);
+      });
 
-        //Registrar usuario bda
+    //Registrar usuario bda
+    let userFormData = Object.fromEntries(datosFormData);
+    delete userFormData.password2;
+    delete userFormData.password;
+    let userDatos = JSON.stringify(userFormData);
 
-        let userFormData= Object.fromEntries(datosFormData)
-        delete userFormData.password2;
-        delete userFormData.password;
-        let userDatos=JSON.stringify(userFormData);
-
-        fetch("https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json",{
-          method:"post",
-          headers: {
-            "Content-type": "application/json;charset=UTF-8",
-          },
-          body: userDatos,
-        }).then((response)=>{return response.json()}).
-        then(()=>{
-          let menu = new Menu();
-          menu.getMenu();
-          let main = new Main(document.querySelector("#container"));
-          main.renderMain();
-        })
-
-    }
-   
-    
+    fetch(
+      "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json",
+      {
+        method: "post",
+        headers: {
+          "Content-type": "application/json;charset=UTF-8",
+        },
+        body: userDatos,
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then(() => {
+        let menu = new Menu();
+        menu.getMenu();
+        let main = new Main(document.querySelector("#container"));
+        main.renderMain();
+      });
   }
+}
