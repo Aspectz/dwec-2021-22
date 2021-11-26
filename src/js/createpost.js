@@ -61,13 +61,12 @@ async function uploadPost(container) {
     
   let newPost = {
     author: localStorage.getItem("nickname"),
-    comments: "0",
     file: urlImg,
     title: document.querySelector("#title").value,
     upvotes: "2",
   };
   fetch(
-    "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/posts.json",
+    "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/prueba/posts.json",
     {
       method: "post",
       headers: { "Content-type": "application/json; charset=UTF-8" },
