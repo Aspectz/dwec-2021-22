@@ -8,6 +8,7 @@ class Post {
   renderPost(container) {
     //container.innerHTML+=`<div class="divExt"><div class="leftDivVotes"><p class="iconUpVote"></p><p>${this.data.upvotes}</p><p class="iconDownVote"></p></div><div class="divPost"><div class="postAuthor"><h6>Posted by ${this.data.author}</h6></div><div class="postTitle"><h3 style="font-size: 1.17em;">${this.data.title}</h3></div><div class="postBody"><img style="max-width: 100%;" src="${this.data.file}"></div><div style="display: flex;"><div class="divCommentsBtn""><i class="iconComment"></i><span>${this.data.comments} Comments</span></div></div></div></div>`;
 
+    console.log(this.data);
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
 
@@ -111,6 +112,8 @@ class Post {
 
   renderUniquePost(container) {
     
+    this.getComments();
+
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
     divExt.style.width="640px";
@@ -221,13 +224,8 @@ class Post {
         },
         body: JSON.stringify(commentBody),
       });
-    });
-
-
-    
+    }); 
   }
-
-
 
 
   async isVoted() {
@@ -238,6 +236,14 @@ class Post {
     );
     let data = await upVotes.json();
     return data;
+  }
+
+
+  async getComments(){
+    let resp=await fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.community}/posts/${this.data.id}/comments.json`);
+    let comments = await resp.json();
+
+    console.log(comments);
   }
 
   async vote(option) {
