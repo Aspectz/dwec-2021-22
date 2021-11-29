@@ -27,6 +27,10 @@ module.exports = {
           'css-loader',
         ],
       },
+      {
+        test:/\.(png|svg|jpg|gif)$/,
+        type='asset/resources'
+      },
     ],
   },
  };

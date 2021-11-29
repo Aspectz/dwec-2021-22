@@ -79,7 +79,9 @@ class Post {
     let spanComm = document.createElement("span");
     let commImg = document.createElement("i");
     commImg.classList.add("iconComment");
-    spanComm.innerHTML = this.data.comments + " Comments";
+
+
+    spanComm.innerHTML = Object.entries(this.data.comments).length + " Comments";
     divCommentsBtn.append(commImg);
     divCommentsBtn.append(spanComm);
     divPostBottom.append(divCommentsBtn);
@@ -111,7 +113,7 @@ class Post {
     
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
-
+    divExt.style.width="640px";
     let divPost = document.createElement("div");
     divPost.classList.add("divPost");
     divExt.append(divPost);
@@ -173,7 +175,7 @@ class Post {
 
     //Bottom Options
     let divPostBottom = document.createElement("div");
-    divPostBottom.style = "display:flex;flex-directionm:row;";
+    divPostBottom.style = "display:flex;flex-direction:column;";
     //comments
 
     let divCommentsBtn = document.createElement("div");
@@ -181,19 +183,22 @@ class Post {
      let spanComm = document.createElement("span");
     //let commImg = document.createElement("i");
     //commImg.classList.add("iconComment");
-    spanComm.innerHTML = this.data.comments + " Comments";
+    spanComm.innerHTML = Object.entries(this.data.comments).length + " Comments";
     /*divCommentsBtn.append(commImg);*/
     divCommentsBtn.append(spanComm); 
 
+    let divFormNewComment=document.createElement("div");
+    
+
     let formComment=document.createElement("form");
-    let textArea=document.createElement("TEXTAREA")
-    textArea.rows=4;
-    textArea.cols=50;    
+    let textArea=document.createElement("TEXTAREA");
+    textArea.classList.add("commentTextArea"); 
 
     formComment.append(textArea);
+    divFormNewComment.append(formComment);
 
     divPostBottom.append(divCommentsBtn);
-    divPostBottom.append(formComment);
+    divPostBottom.append(divFormNewComment);
     //Appends
     divPost.append(divPostAuthor);
     divPost.append(divPostTitle);

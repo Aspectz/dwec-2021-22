@@ -52,12 +52,6 @@ class Main {
     );
     let comm = await getAllCommunities.json();
 
-    let borrar=comm.prueba.posts;
-
-
-    for(let a  in borrar){
-      console.log(Object.entries(borrar[a].comments).length);;
-    }
     
     this.container.innerHTML = "";
     this.container.classList.add("mainContainer");
