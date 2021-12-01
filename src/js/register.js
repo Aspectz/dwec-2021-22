@@ -2,8 +2,8 @@ import { Main } from "./main";
 import { Menu } from "./topmenu";
 export { Register };
 class Register {
-  constructor(container) {
-    this.container = container;
+  constructor() {
+    this.container = app.container;
   }
   renderRegister(error) {
     container.classList.remove("mainContainer");

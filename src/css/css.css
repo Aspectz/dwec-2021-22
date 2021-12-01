@@ -44,6 +44,7 @@
     color:#77797a;
     background-color: #1a1a1b;
     padding: 10px;
+    height: 500px;
 }
 .leftDivVotes{
     display: flex;

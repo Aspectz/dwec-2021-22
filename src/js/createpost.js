@@ -2,6 +2,7 @@ export { CreatePost };
 import "../css/createPost.css";
 import { Main } from "./main";
 import { Menu } from "./topmenu";
+import {Router} from '../router/routes.js'
 class CreatePost {
   constructor(container) {
     this.container = container;
@@ -77,9 +78,6 @@ async function uploadPost(container) {
     .then((datos) => {
       console.log("Working");
 
-      let menu = new Menu();
-      menu.getMenu();
-      let main = new Main(document.querySelector("#container"));
-      main.renderMain();
+      new Router("#/");
     });
 }

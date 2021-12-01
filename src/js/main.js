@@ -1,9 +1,9 @@
 export { Main };
-import { Post } from "./posts.js";
+import { PostView } from "../views/PostView.js";
 
 class Main {
-  constructor(cont) {
-    this.container = cont;
+  constructor() {
+    this.container = app.container;
   }
   renderMain() {
     if (localStorage.getItem("localId") != null) this.getPosts();
@@ -13,6 +13,8 @@ class Main {
   }
 
   async getPosts() {
+
+
     let getCommunities = await fetch(
       `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem("localId")}/communities.json`
     );
@@ -22,6 +24,7 @@ class Main {
     );
     let data = await resp.json();
     let posts = data;
+    
     this.container.innerHTML = "";
     this.container.classList.add("mainContainer");
 
@@ -51,8 +54,8 @@ class Main {
       `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities.json`
     );
     let comm = await getAllCommunities.json();
-
     
+
     this.container.innerHTML = "";
     this.container.classList.add("mainContainer");
 

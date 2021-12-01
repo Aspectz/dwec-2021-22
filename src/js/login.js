@@ -1,9 +1,13 @@
 import { Main } from "./main";
 import { Menu } from "./topmenu";
 export { Login };
+import {Router} from '../router/routes.js';
+import {renderMenu} from '../scripts.js';
 class Login {
-  constructor() {}
-  renderLogin(container) {
+  constructor() {
+    this.container=app.container;
+  }
+  renderLogin() {
     container.classList.remove("mainContainer");
     container.innerHTML = `<section class="vh-100 bg-light">
         <div class="container-fluid h-custom">
@@ -48,7 +52,6 @@ class Login {
           </div>
         </div>
       </section>`;
-    console.log(localStorage);
     document.querySelector("#form_login").addEventListener("submit", (e) => {
       this.loginSubmit(e);
     });
@@ -86,10 +89,16 @@ class Login {
         localStorage.setItem("email", datos.email);
         localStorage.setItem("nickname", datos.displayName);
 
-        let menu = new Menu();
+
+        
+
+
+        renderMenu();
+        new Router("#/");
+        /*let menu = new Menu();
         menu.getMenu();
         let main = new Main(document.querySelector("#container"));
-        main.renderMain();
+        main.renderMain();*/
       })
       .catch((error) => {
         console.error(error);

@@ -5,26 +5,40 @@ import 'bootstrap';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import {Router} from './router/routes.js';
+export {renderMenu}
 (()=>{
-    
-    function main(cont){
-        let main=new Main(cont);
-        main.renderMain();
+    //Detect reload
+    if (performance.navigation.type == performance.navigation.TYPE_RELOAD){
+        window.location.href="http://localhost:8080/#/";
     }
-    function renderMenu(){
-        let menu=new Menu();
-        menu.getMenu();
-        
-    }
-    
+
+
+    window.app={}
+
     document.addEventListener("DOMContentLoaded",function(){
+        app.container=document.querySelector("#container");
+        new Router("#/");
         renderMenu();
-        let container=document.querySelector("#container");
-        main(container);
 
     });
+
+
+    window.addEventListener("hashchange",()=>{
+        new Router(window.location.hash);
+    });
+
+    
+   
+    
+    
 })();
 
+function renderMenu(){
+    let menu=new Menu();
+    menu.getMenu();
+    
+}
 
 
 

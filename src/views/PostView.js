@@ -1,20 +1,86 @@
-import { Main } from "./main";
-export { Post };
-class Post {
-  constructor(data,community) {
-    this.data = data;
-    this.community=community;
-  }
-  renderPost(container) {
-    //container.innerHTML+=`<div class="divExt"><div class="leftDivVotes"><p class="iconUpVote"></p><p>${this.data.upvotes}</p><p class="iconDownVote"></p></div><div class="divPost"><div class="postAuthor"><h6>Posted by ${this.data.author}</h6></div><div class="postTitle"><h3 style="font-size: 1.17em;">${this.data.title}</h3></div><div class="postBody"><img style="max-width: 100%;" src="${this.data.file}"></div><div style="display: flex;"><div class="divCommentsBtn""><i class="iconComment"></i><span>${this.data.comments} Comments</span></div></div></div></div>`;
 
-    console.log(this.data);
+export { PostView };
+
+class PostView {
+
+  constructor(container, type,logged) {
+    this.container = container;
+    this.type = type;
+    this.logged=logged;
+  }
+
+
+  async getAllPosts(){
+
+  }
+
+
+  async renderItem(Item) {
+  
+    this.data=Item;
+    this.container.innerHTML = "";
+    this.container.classList.add("mainContainer");
+
+    //Container where all posts are showed to user
+
+    let divPosts = document.createElement("div");
+    divPosts.classList.add("containerPosts");
+
+    //Right Aside bar
+    let divAsideRight = document.createElement("div");
+    let h1Aside = document.createElement("h1");
+    divAsideRight.classList.add("divRightAside");
+    h1Aside.innerHTML = "Aside here";
+    divAsideRight.append(h1Aside);
+
+   
+    if(this.type=="list"){
+      for (let commun in this.data) {
+        let posts = this.data[commun].posts;
+        for (let post in posts) {
+          posts[post].id = post;
+          await this.renderPost(divPosts,posts[post],this.data[commun].name);
+        }
+      }
+    }
+    else if(this.type="detail"){
+      let getCommunity=window.location.hash.split("/")[2];
+      await this.renderPost(divPosts,this.data,getCommunity);
+    }
+
+
+
+    
+
+
+    this.container.append(divPosts);
+    this.container.append(divAsideRight);
+  }
+
+
+  
+  renderPost(container,postData,communityName) {
+   
+    
+   // console.log(postData,communityName);
+
+    //console.log(this.data);
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
 
+
+
+
     let divPost = document.createElement("div");
     divPost.classList.add("divPost");
+
+    let href=document.createElement("a");
+    href.style.textDecoration="none";
+    href.style.color="white";
+    href.href=`#/communities/${communityName}/posts/${postData.id}`;
+
     divExt.append(divPost);
+
     //Left bar
     let leftDivVotes = document.createElement("div");
     leftDivVotes.classList.add("leftDivVotes");
@@ -24,10 +90,10 @@ class Post {
 
     let p2 = document.createElement("p");
     p2.id = "pUpvote";
-    p2.innerHTML = this.data.upvotes;
+    p2.innerHTML = postData.upvotes;
     let downVote = document.createElement("p");
     
-    this.isVoted().then((isVoted)=>{
+   /* this.isVoted().then((isVoted)=>{
         if(isVoted=="upvoted"){
             upVote.classList.add("iconUpVoted");
             downVote.classList.add("iconDownVote");
@@ -39,7 +105,7 @@ class Post {
             upVote.classList.add("iconUpVote");
             downVote.classList.add("iconDownVote");
         }
-    });
+    });*/
 
 
 
@@ -53,7 +119,7 @@ class Post {
     let divPostAuthor = document.createElement("div");
     let author = document.createElement("h6");
     divPostAuthor.classList.add("postAuthor");
-    author.innerHTML = `Posted by ${this.data.author} in ${this.community}`;
+    author.innerHTML = `Posted by ${postData.author} in ${communityName}`;
     divPostAuthor.append(author);
 
     //Title
@@ -61,14 +127,14 @@ class Post {
     divPostTitle.classList.add("postTitle");
     let textPost = document.createElement("h3");
     textPost.style = "font-size:1.17em;";
-    textPost.innerHTML = this.data.title;
+    textPost.innerHTML = postData.title;
     divPostTitle.append(textPost);
     //File
     let divPostBody = document.createElement("div");
     divPostBody.classList.add("postBody");
     let file = document.createElement("img");
     file.style = "max-width:100%";
-    file.src = this.data.file;
+    file.src = postData.file;
     divPostBody.append(file);
 
     //Bottom Options
@@ -82,25 +148,20 @@ class Post {
     commImg.classList.add("iconComment");
 
 
-    spanComm.innerHTML = Object.entries(this.data.comments).length + " Comments";
+    spanComm.innerHTML = postData.comments!=null ? Object.entries(postData.comments).length + " Comments" : "0 Comments";
     divCommentsBtn.append(commImg);
     divCommentsBtn.append(spanComm);
     divPostBottom.append(divCommentsBtn);
 
     //Appends
-    divPost.append(divPostAuthor);
-    divPost.append(divPostTitle);
-    divPost.append(divPostBody);
-    divPost.append(divPostBottom);
+    divPost.append(href);
+    href.append(divPostAuthor);
+    href.append(divPostTitle);
+    href.append(divPostBody);
+    href.append(divPostBottom);
+
     divExt.append(divPost);
     container.append(divExt);
-
-
-    
-    divPost.addEventListener("click", () => {
-        document.querySelector("#container").innerHTML="";
-        this.renderUniquePost(document.querySelector("#container"));
-    });
 
     upVote.addEventListener("click", () => {
       this.vote("upvoted");
@@ -109,7 +170,7 @@ class Post {
       this.vote("downvoted");
     });
   }
-
+/*
   renderUniquePost(container) {
     
     this.getComments();
@@ -132,19 +193,19 @@ class Post {
     p2.innerHTML = this.data.upvotes;
     let downVote = document.createElement("p");
     
-    /* this.isVoted().then((isVoted)=>{
-        if(isVoted=="upvoted"){
-            upVote.classList.add("iconUpVoted");
+    // this.isVoted().then((isVoted)=>{
+     // if(isVoted=="upvoted"){
+       //     upVote.classList.add("iconUpVoted");
+         //   downVote.classList.add("iconDownVote");
+       // }
+       // if(isVoted=="downvoted"){
+         //   upVote.classList.add("iconUpVote");
+           // downVote.classList.add("iconDownVoted");
+        //}else{
+          //  upVote.classList.add("iconUpVote");
             downVote.classList.add("iconDownVote");
-        }
-        if(isVoted=="downvoted"){
-            upVote.classList.add("iconUpVote");
-            downVote.classList.add("iconDownVoted");
-        }else{
-            upVote.classList.add("iconUpVote");
-            downVote.classList.add("iconDownVote");
-        }
-    }); */
+       // }
+    //});
 
 
 
@@ -187,7 +248,7 @@ class Post {
     //let commImg = document.createElement("i");
     //commImg.classList.add("iconComment");
     spanComm.innerHTML = Object.entries(this.data.comments).length + " Comments";
-    /*divCommentsBtn.append(commImg);*/
+    //divCommentsBtn.append(commImg);
     divCommentsBtn.append(spanComm); 
 
     let divFormNewComment=document.createElement("div");
@@ -243,7 +304,6 @@ class Post {
     let resp=await fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.community}/posts/${this.data.id}/comments.json`);
     let comments = await resp.json();
 
-    console.log(comments);
   }
 
   async vote(option) {
@@ -288,7 +348,7 @@ class Post {
     document.querySelector("#pUpvote").innerHTML=data;
 
     
-    /* let main = new Main();
-    main.renderMain(); */
-  }
+    // let main = new Main();
+    //main.renderMain(); 
+  }*/
 }
