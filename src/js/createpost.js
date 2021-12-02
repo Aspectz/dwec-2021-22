@@ -2,15 +2,20 @@ export { CreatePost };
 import "../css/createPost.css";
 import { Main } from "./main";
 import { Menu } from "./topmenu";
-import {Router} from '../router/routes.js'
+import { Router } from "../router/routes.js";
 class CreatePost {
   constructor(container) {
     this.container = container;
   }
 
   renderCreatePost() {
-    this.container.innerHTML = `<div class="containerCreatePosts">
+    this.container.innerHTML = `<div class="mainContainer"><div class="containerCreatePosts">
              <form> 
+             <div>
+             <select class="form-select" aria-label="size 3 select example" id="communitySelect">
+                <option>Choose a community</option>
+              </select>
+             </div>
              <div class="postNameDiv">
                 <input type="text" id="title" placeholder="Title"/>
              </div>
@@ -21,14 +26,29 @@ class CreatePost {
             </div>
             <input type="button" id="submit" value="submit"/>
              </form>
-             </div>`;
+             </div></div>`;
     document.querySelector("#formFile").addEventListener("change", function () {
       encodeImageFileAsURL(this);
     });
     document
       .querySelector("#submit")
       .addEventListener("click", () => uploadPost(this.container));
+
+
+
+      let select=document.querySelector("#communitySelect");
+
+      for(let i=0;i<4;i++){
+        let opt=document.createElement("option");
+        opt.innerHTML=i;
+        console.log("a");
+        select.append(opt);
+      }
+
   }
+    
+
+
 }
 function encodeImageFileAsURL(element) {
   var file = element.files[0];
@@ -59,7 +79,7 @@ async function uploadPost(container) {
       console.log("FIle uploaded");
       urlImg = JSON.parse(data).url;
     });
-    
+
   let newPost = {
     author: localStorage.getItem("nickname"),
     file: urlImg,

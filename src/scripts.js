@@ -9,16 +9,14 @@ import {Router} from './router/routes.js';
 export {renderMenu}
 (()=>{
     //Detect reload
-    if (performance.navigation.type == performance.navigation.TYPE_RELOAD){
-        window.location.href="http://localhost:8080/#/";
-    }
 
 
     window.app={}
 
     document.addEventListener("DOMContentLoaded",function(){
         app.container=document.querySelector("#container");
-        new Router("#/");
+
+        new Router(window.location.hash);
         renderMenu();
 
     });

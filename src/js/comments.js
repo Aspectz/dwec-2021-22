@@ -3,7 +3,8 @@ class Comment{
     constructor(){}
 
 
-    async getComment(){
+
+    renderComment(){
         
     }
 

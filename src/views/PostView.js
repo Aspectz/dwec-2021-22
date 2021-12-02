@@ -3,10 +3,12 @@ export { PostView };
 
 class PostView {
 
-  constructor(container, type,logged) {
-    this.container = container;
+
+  constructor(cont, type,logged) {
+    this.container = cont;
     this.type = type;
     this.logged=logged;
+    console.log("cont",cont);
   }
 
 
@@ -16,16 +18,16 @@ class PostView {
 
 
   async renderItem(Item) {
-  
+    
     this.data=Item;
     this.container.innerHTML = "";
-    this.container.classList.add("mainContainer");
 
+    let mainContainer=document.createElement("div")
+    mainContainer.classList.add("mainContainer");
     //Container where all posts are showed to user
 
     let divPosts = document.createElement("div");
     divPosts.classList.add("containerPosts");
-
     //Right Aside bar
     let divAsideRight = document.createElement("div");
     let h1Aside = document.createElement("h1");
@@ -39,37 +41,26 @@ class PostView {
         let posts = this.data[commun].posts;
         for (let post in posts) {
           posts[post].id = post;
-          await this.renderPost(divPosts,posts[post],this.data[commun].name);
+          await this.renderPost(divPosts,posts[post]);
         }
       }
     }
     else if(this.type="detail"){
-      let getCommunity=window.location.hash.split("/")[2];
-      await this.renderPost(divPosts,this.data,getCommunity);
+      await this.renderPost(divPosts,this.data);
     }
 
+    mainContainer.append(divPosts);
+    mainContainer.append(divAsideRight);
 
-
-    
-
-
-    this.container.append(divPosts);
-    this.container.append(divAsideRight);
+    this.container.append(mainContainer);
   }
 
 
   
-  renderPost(container,postData,communityName) {
-   
-    
-   // console.log(postData,communityName);
+  renderPost(container,postData) {
 
-    //console.log(this.data);
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
-
-
-
 
     let divPost = document.createElement("div");
     divPost.classList.add("divPost");
@@ -77,7 +68,7 @@ class PostView {
     let href=document.createElement("a");
     href.style.textDecoration="none";
     href.style.color="white";
-    href.href=`#/communities/${communityName}/posts/${postData.id}`;
+    href.href=`#/communities/${postData.community}/posts/${postData.id}`;
 
     divExt.append(divPost);
 
@@ -119,7 +110,7 @@ class PostView {
     let divPostAuthor = document.createElement("div");
     let author = document.createElement("h6");
     divPostAuthor.classList.add("postAuthor");
-    author.innerHTML = `Posted by ${postData.author} in ${communityName}`;
+    author.innerHTML = `Posted by ${postData.author} in ${postData.community}`;
     divPostAuthor.append(author);
 
     //Title

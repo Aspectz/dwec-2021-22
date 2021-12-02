@@ -8,7 +8,7 @@ class Login {
     this.container=app.container;
   }
   renderLogin() {
-    container.classList.remove("mainContainer");
+    //container.classList.remove("mainContainer");
     container.innerHTML = `<section class="vh-100 bg-light">
         <div class="container-fluid h-custom">
           <div class="row d-flex justify-content-center align-items-center h-100">

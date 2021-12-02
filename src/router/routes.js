@@ -7,6 +7,7 @@ import { PostsPage } from "../pages/PostsPage.js";
 import { CreatePost } from "../js/createpost.js";
 import { renderMenu } from "../scripts.js";
 import { PostDetails } from "../pages/PostDetails.js";
+import { PostCreation } from "../pages/PostCreation.js";
 
 class Router {
   constructor(route) {
@@ -29,6 +30,10 @@ class Router {
           let posts = new PostsPage();
           posts.render(app.container);
           break;
+        case "":
+          let p = new PostsPage();
+          p.render(app.container);
+          break;
         case "#/register":
           console.log("reg");
           let register = new Register();
@@ -48,9 +53,9 @@ class Router {
           break;
 
         case "#/create_post":
-          console.log("a");
-          let createPost = new CreatePost(app.container);
-          createPost.renderCreatePost();
+          console.log("create post");
+          let createPost = new PostCreation();
+          createPost.render(app.container);
           break;
       }
     }
