@@ -75,8 +75,7 @@
     content: url("../img/chat-bubble.png");
     width: 30px;
     padding-right: 5px;
-    height: 24px;
-    
+    height: 24px;   
 }
 
 .postAuthor{

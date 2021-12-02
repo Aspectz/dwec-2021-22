@@ -17,14 +17,17 @@ class Router {
 
   getRoutes() {
 
-
-    if (/^#\/communities/.test(this.route)) {
+    if (/^#\/communities\/[0-9a-zA-Z]+\/posts\//.test(this.route)) {
         let url=this.route.substring(1);
         let postDetails=new PostDetails(url);
         postDetails.render(app.container);
 
-
-    } else {
+    }else if(/^#\/communities\/[0-9a-zA-Z]+/.test(this.route)) {
+      console.log("entra");
+    }
+    
+    
+    else {
       switch (this.route) {
         case "#/":
           let posts = new PostsPage();

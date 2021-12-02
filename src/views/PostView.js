@@ -1,3 +1,4 @@
+import { Main } from "../js/main";
 
 export { PostView };
 
@@ -8,18 +9,14 @@ class PostView {
     this.container = cont;
     this.type = type;
     this.logged=logged;
-    console.log("cont",cont);
   }
 
 
-  async getAllPosts(){
-
-  }
 
 
   async renderItem(Item) {
-    
     this.data=Item;
+    
     this.container.innerHTML = "";
 
     let mainContainer=document.createElement("div")
@@ -29,14 +26,13 @@ class PostView {
     let divPosts = document.createElement("div");
     divPosts.classList.add("containerPosts");
     //Right Aside bar
-    let divAsideRight = document.createElement("div");
-    let h1Aside = document.createElement("h1");
-    divAsideRight.classList.add("divRightAside");
-    h1Aside.innerHTML = "Aside here";
-    divAsideRight.append(h1Aside);
 
-   
+    mainContainer.append(divPosts);
+
+
     if(this.type=="list"){
+
+      this.getAside(mainContainer);
       for (let commun in this.data) {
         let posts = this.data[commun].posts;
         for (let post in posts) {
@@ -46,14 +42,43 @@ class PostView {
       }
     }
     else if(this.type="detail"){
-      await this.renderPost(divPosts,this.data);
+      this.renderPost(divPosts,this.data);
+      this.renderComments(divPosts,this.data.comments);
+
+
     }
 
-    mainContainer.append(divPosts);
-    mainContainer.append(divAsideRight);
+    
 
     this.container.append(mainContainer);
   }
+
+  getCommentBox(divPostBtm){
+   
+
+    let divFormNewComment=document.createElement("div");
+
+    let formComment=document.createElement("form");
+    let textArea=document.createElement("TEXTAREA");
+    textArea.classList.add("commentTextArea"); 
+
+    formComment.append(textArea);
+    divFormNewComment.append(formComment);
+    divPostBtm.append(divFormNewComment);
+  }
+
+  getAside(mainContainer){
+    let divAsideRight = document.createElement("div");
+    let h1Aside = document.createElement("h1");
+    divAsideRight.classList.add("divRightAside");
+    h1Aside.innerHTML = "Aside here";
+    divAsideRight.append(h1Aside);
+    mainContainer.append(divAsideRight);
+  }
+
+  async postList(){}
+
+  async singlePost(){}
 
 
   
@@ -68,7 +93,8 @@ class PostView {
     let href=document.createElement("a");
     href.style.textDecoration="none";
     href.style.color="white";
-    href.href=`#/communities/${postData.community}/posts/${postData.id}`;
+    console.log(this.type);
+    if(this.type!="detail")href.href=`#/communities/${postData.community}/posts/${postData.id}`;
 
     divExt.append(divPost);
 
@@ -130,7 +156,8 @@ class PostView {
 
     //Bottom Options
     let divPostBottom = document.createElement("div");
-    divPostBottom.style = "display:flex;flex-directionm:row;";
+    divPostBottom.id="divPostBottom";
+    divPostBottom.classList.add("divCommentsBtn"); 
     //comments
     let divCommentsBtn = document.createElement("div");
     divCommentsBtn.classList.add("divCommentsBtn");
@@ -138,11 +165,18 @@ class PostView {
     let commImg = document.createElement("i");
     commImg.classList.add("iconComment");
 
-
     spanComm.innerHTML = postData.comments!=null ? Object.entries(postData.comments).length + " Comments" : "0 Comments";
     divCommentsBtn.append(commImg);
     divCommentsBtn.append(spanComm);
     divPostBottom.append(divCommentsBtn);
+
+    
+
+    if(this.type=="detail"){
+      divPostBottom.classList.remove("divCommentsBtn");
+      this.getCommentBox(divPostBottom);
+    }
+
 
     //Appends
     divPost.append(href);
@@ -161,6 +195,30 @@ class PostView {
       this.vote("downvoted");
     });
   }
+
+   renderComments(divPosts,data){
+    
+    for(let comment in data){
+
+      let div=document.createElement("div");
+      div.classList.add("divExt");
+
+      let divInfo=document.createElement("div");;
+
+
+      let pAuthor=document.createElement("p");
+      pAuthor.innerHTML=data[comment].user;
+      let pComm=document.createElement("p");
+      pComm.innerHTML=data[comment].comment;
+
+      divInfo.append(pAuthor);
+      divInfo.append(pComm);
+      div.append(divInfo);
+      divPosts.append(div)
+    }
+  }
+
+
 /*
   renderUniquePost(container) {
     

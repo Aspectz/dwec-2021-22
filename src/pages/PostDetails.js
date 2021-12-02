@@ -6,6 +6,7 @@ class PostDetails{
 
     constructor(url){
         this.url=url;
+        console.log(this.url);
     }
 
     render(container){
