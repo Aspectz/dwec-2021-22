@@ -77,7 +77,14 @@
     padding-right: 5px;
     height: 24px;   
 }
-
+.hrefStyle{
+  text-decoration:none;
+  color:white;
+}
+.hrefStyle:hover{
+  color: white;
+  text-decoration: underline;
+}
 .postAuthor{
     color:#77797a;
 }

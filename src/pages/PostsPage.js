@@ -8,8 +8,6 @@ class PostsPage{
 
     async render(container){
 
-
-        console.log(container);
         let postList=new Controller(
 
             new Model(await this.getUrl()),

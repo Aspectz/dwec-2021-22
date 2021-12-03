@@ -1,25 +1,20 @@
 import { Main } from "../js/main";
+import { Router } from "../router/routes";
 
 export { PostView };
 
 class PostView {
-
-
-  constructor(cont, type,logged) {
+  constructor(cont, type,id) {
     this.container = cont;
     this.type = type;
-    this.logged=logged;
+    this.id=id;
   }
 
-
-
-
   async renderItem(Item) {
-    this.data=Item;
-    
+    this.data = Item;
     this.container.innerHTML = "";
 
-    let mainContainer=document.createElement("div")
+    let mainContainer = document.createElement("div");
     mainContainer.classList.add("mainContainer");
     //Container where all posts are showed to user
 
@@ -28,46 +23,71 @@ class PostView {
     //Right Aside bar
 
     mainContainer.append(divPosts);
+    
 
-
-    if(this.type=="list"){
-
+    if (this.type == "list") {
       this.getAside(mainContainer);
       for (let commun in this.data) {
-        let posts = this.data[commun].posts;
+       let posts = this.data[commun].posts;
         for (let post in posts) {
           posts[post].id = post;
-          await this.renderPost(divPosts,posts[post]);
+          await this.renderPost(divPosts, posts[post]);
         }
       }
+    } else if (this.type == "listInCommunity") {
+      let posts = this.data.posts;
+      for (let post in posts) {
+        posts[post].id = post;
+        await this.renderPost(divPosts, posts[post]);
+      }
+    } else if ((this.type = "detail")) {
+      this.renderPost(divPosts, this.data);
+      this.renderComments(divPosts, this.data.comments);
     }
-    else if(this.type="detail"){
-      this.renderPost(divPosts,this.data);
-      this.renderComments(divPosts,this.data.comments);
-
-
-    }
-
-    
 
     this.container.append(mainContainer);
   }
 
-  getCommentBox(divPostBtm){
-   
+  getCommentBox(divPostBtm) {
+    let divFormNewComment = document.createElement("div");
 
-    let divFormNewComment=document.createElement("div");
-
-    let formComment=document.createElement("form");
-    let textArea=document.createElement("TEXTAREA");
-    textArea.classList.add("commentTextArea"); 
+    let formComment = document.createElement("form");
+    let textArea = document.createElement("TEXTAREA");
+    textArea.classList.add("commentTextArea");
 
     formComment.append(textArea);
     divFormNewComment.append(formComment);
     divPostBtm.append(divFormNewComment);
+
+    let btn=document.createElement("button");
+    btn.innerHTML="Comment";
+    btn.disabled=true;
+    btn.className=("btn btn-primary");
+    textArea.addEventListener("input",()=>{
+      if(textArea.value.length>0) btn.disabled=false;
+      else btn.disabled=true;
+    });
+
+    btn.addEventListener("click",async ()=>{
+      let comment=textArea.value;
+      let user=localStorage.getItem("nickname");
+      let commentBody={ "user" : user , "comment":comment}
+       let sendComment=await fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.data.community}/posts/${this.id}/comments.json`,
+      {
+        method: "post",
+        headers: {
+          "Content-type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify(commentBody),
+      }); 
+      sendComment.then(new Router(`#/communities/${this.data.community}/posts/${this.id}`))
+    } );
+
+    divPostBtm.append(btn);
+
   }
 
-  getAside(mainContainer){
+  getAside(mainContainer) {
     let divAsideRight = document.createElement("div");
     let h1Aside = document.createElement("h1");
     divAsideRight.classList.add("divRightAside");
@@ -76,13 +96,8 @@ class PostView {
     mainContainer.append(divAsideRight);
   }
 
-  async postList(){}
 
-  async singlePost(){}
-
-
-  
-  renderPost(container,postData) {
+  renderPost(container, postData) {
 
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
@@ -90,11 +105,11 @@ class PostView {
     let divPost = document.createElement("div");
     divPost.classList.add("divPost");
 
-    let href=document.createElement("a");
-    href.style.textDecoration="none";
-    href.style.color="white";
-    console.log(this.type);
-    if(this.type!="detail")href.href=`#/communities/${postData.community}/posts/${postData.id}`;
+    let href = document.createElement("a");
+    href.style.textDecoration = "none";
+    href.style.color = "white";
+    if (this.type != "detail")
+      href.href = `#/communities/${postData.community}/posts/${postData.id}`;
 
     divExt.append(divPost);
 
@@ -102,15 +117,13 @@ class PostView {
     let leftDivVotes = document.createElement("div");
     leftDivVotes.classList.add("leftDivVotes");
     let upVote = document.createElement("p");
-   
-    
 
     let p2 = document.createElement("p");
     p2.id = "pUpvote";
     p2.innerHTML = postData.upvotes;
     let downVote = document.createElement("p");
-    
-   /* this.isVoted().then((isVoted)=>{
+
+    /* this.isVoted().then((isVoted)=>{
         if(isVoted=="upvoted"){
             upVote.classList.add("iconUpVoted");
             downVote.classList.add("iconDownVote");
@@ -124,8 +137,6 @@ class PostView {
         }
     });*/
 
-
-
     leftDivVotes.append(upVote);
     leftDivVotes.append(p2);
     leftDivVotes.append(downVote);
@@ -136,7 +147,7 @@ class PostView {
     let divPostAuthor = document.createElement("div");
     let author = document.createElement("h6");
     divPostAuthor.classList.add("postAuthor");
-    author.innerHTML = `Posted by ${postData.author} in ${postData.community}`;
+    author.innerHTML = `Posted by ${postData.author} in <a class="hrefStyle" href="#/communities/${postData.community}">${postData.community}</a>`;
     divPostAuthor.append(author);
 
     //Title
@@ -156,8 +167,8 @@ class PostView {
 
     //Bottom Options
     let divPostBottom = document.createElement("div");
-    divPostBottom.id="divPostBottom";
-    divPostBottom.classList.add("divCommentsBtn"); 
+    divPostBottom.id = "divPostBottom";
+    divPostBottom.classList.add("divCommentsBtn");
     //comments
     let divCommentsBtn = document.createElement("div");
     divCommentsBtn.classList.add("divCommentsBtn");
@@ -165,18 +176,18 @@ class PostView {
     let commImg = document.createElement("i");
     commImg.classList.add("iconComment");
 
-    spanComm.innerHTML = postData.comments!=null ? Object.entries(postData.comments).length + " Comments" : "0 Comments";
+    spanComm.innerHTML =
+      postData.comments != null
+        ? Object.entries(postData.comments).length + " Comments"
+        : "0 Comments";
     divCommentsBtn.append(commImg);
     divCommentsBtn.append(spanComm);
     divPostBottom.append(divCommentsBtn);
 
-    
-
-    if(this.type=="detail"){
+    if (this.type == "detail") {
       divPostBottom.classList.remove("divCommentsBtn");
-      this.getCommentBox(divPostBottom);
+      if(localStorage.getItem("nickname")!=null)this.getCommentBox(divPostBottom);
     }
-
 
     //Appends
     divPost.append(href);
@@ -196,30 +207,26 @@ class PostView {
     });
   }
 
-   renderComments(divPosts,data){
-    
-    for(let comment in data){
-
-      let div=document.createElement("div");
+  renderComments(divPosts, data) {
+    for (let comment in data) {
+      let div = document.createElement("div");
       div.classList.add("divExt");
 
-      let divInfo=document.createElement("div");;
-
-
-      let pAuthor=document.createElement("p");
-      pAuthor.innerHTML=data[comment].user;
-      let pComm=document.createElement("p");
-      pComm.innerHTML=data[comment].comment;
+      let divInfo = document.createElement("div");
+      divInfo.style.wordBreak="break-word";
+      let pAuthor = document.createElement("p");
+      pAuthor.innerHTML = data[comment].user;
+      let pComm = document.createElement("p");
+      pComm.innerHTML = data[comment].comment;
 
       divInfo.append(pAuthor);
       divInfo.append(pComm);
       div.append(divInfo);
-      divPosts.append(div)
+      divPosts.append(div);
     }
   }
 
-
-/*
+  /*
   renderUniquePost(container) {
     
     this.getComments();
