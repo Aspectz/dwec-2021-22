@@ -1,10 +1,8 @@
 export { Router };
 
-import { Main } from "../js/main.js";
-import { Register } from "../js/register.js";
-import { Login } from "../js/login.js";
+import { Register } from "../components/register.js";
+import { Login } from "../components/login.js";
 import { PostsPage } from "../pages/PostsPage.js";
-import { CreatePost } from "../js/createpost.js";
 import { renderMenu } from "../scripts.js";
 import { PostDetails } from "../pages/PostDetails.js";
 import { PostCreation } from "../pages/PostCreation.js";
@@ -19,8 +17,8 @@ class Router {
   getRoutes() {
     if (/^#\/communities\/[0-9a-zA-Z]+\/posts\//.test(this.route)) {
       let url = this.route.substring(1);
-      let id=url.substring(url.length,url.lastIndexOf("/")+1)
-      let postDetails = new PostDetails(url,id);
+      let id = url.substring(url.length, url.lastIndexOf("/") + 1);
+      let postDetails = new PostDetails(url, id);
       postDetails.render(app.container);
     } else if (/^#\/communities\/[0-9a-zA-Z]+/.test(this.route)) {
       let url = this.route.substring(1);

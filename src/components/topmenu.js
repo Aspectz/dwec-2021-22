@@ -1,7 +1,3 @@
-import { Login } from "./login";
-import { Register } from "./register.js";
-import { CreatePost } from "./createpost.js";
-import { Main } from "./main";
 export { Menu };
 
 class Menu {
@@ -26,10 +22,10 @@ class Menu {
       } <i class="fas fa-caret-down"></i></a>
           <div class="dropdown-menu">
               <ul>
-                <li><a href="#">Pricing</a></li>
+                <li><a href="#">Create Community</a></li>
                 <li><a href="#">Portfolio</a></li>
                 <li>
-                  <a href="#">Team </a>
+                  <a href="#">Profile </a>
                 </li>
                 <li><a id="log_out" href="#/logout">Log Out</a></li>
               </ul>
@@ -46,14 +42,4 @@ class Menu {
     </ul>`;
   }
   
-}
-
-function login(cont) {
-  let login = new Login();
-  login.renderLogin(cont);
-}
-
-function createPost(container) {
-  let createPost = new CreatePost(container);
-  createPost.renderCreatePost();
 }

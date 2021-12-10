@@ -1,6 +1,5 @@
-import {Main} from './js/main.js';
 import './css/css.css';
-import {Menu} from './js/topmenu.js'
+import {Menu} from './components/topmenu.js'
 import 'bootstrap';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,12 +23,7 @@ export {renderMenu}
 
     window.addEventListener("hashchange",()=>{
         new Router(window.location.hash);
-    });
-
-    
-   
-    
-    
+    });    
 })();
 
 function renderMenu(){

@@ -1,6 +1,6 @@
-import { Main } from "./main";
-import { Menu } from "./topmenu";
 export { Register };
+import {Router} from '../router/routes.js';
+import {renderMenu} from '../scripts.js';
 class Register {
   constructor() {
     this.container = app.container;
@@ -138,10 +138,8 @@ class Register {
             return response.json();
           })
           .then(() => {
-            let menu = new Menu();
-            menu.getMenu();
-            let main = new Main(document.querySelector("#container"));
-            main.renderMain();
+            renderMenu();
+            new Router("#/");
           });
       })
       .catch((error) => {

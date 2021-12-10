@@ -1,5 +1,3 @@
-import { Main } from "./main";
-import { Menu } from "./topmenu";
 export { Login };
 import {Router} from '../router/routes.js';
 import {renderMenu} from '../scripts.js';
@@ -8,7 +6,6 @@ class Login {
     this.container=app.container;
   }
   renderLogin() {
-    //container.classList.remove("mainContainer");
     container.innerHTML = `<section class="vh-100 bg-light">
         <div class="container-fluid h-custom">
           <div class="row d-flex justify-content-center align-items-center h-100">
@@ -88,17 +85,10 @@ class Login {
         localStorage.setItem("localId", datos.localId);
         localStorage.setItem("email", datos.email);
         localStorage.setItem("nickname", datos.displayName);
-
-
         
-
-
         renderMenu();
+      
         new Router("#/");
-        /*let menu = new Menu();
-        menu.getMenu();
-        let main = new Main(document.querySelector("#container"));
-        main.renderMain();*/
       })
       .catch((error) => {
         console.error(error);

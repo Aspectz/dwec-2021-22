@@ -1,4 +1,3 @@
-import { Main } from "../js/main";
 import { Router } from "../router/routes";
 
 export { PostView };
@@ -69,10 +68,15 @@ class PostView {
     });
 
     btn.addEventListener("click",async ()=>{
+
+      let date = new Date();
+      let dateFormat =
+            [date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/");
+
       let comment=textArea.value;
       let user=localStorage.getItem("nickname");
-      let commentBody={ "user" : user , "comment":comment}
-       let sendComment=await fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.data.community}/posts/${this.id}/comments.json`,
+      let commentBody={ "user" : user , "comment":comment , "date":dateFormat}
+       let sendComment=fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.data.community}/posts/${this.id}/comments.json`,
       {
         method: "post",
         headers: {
@@ -80,8 +84,10 @@ class PostView {
         },
         body: JSON.stringify(commentBody),
       }); 
-      sendComment.then(new Router(`#/communities/${this.data.community}/posts/${this.id}`))
+      sendComment.then( ()=>{ console.log("a");new Router(`#/communities/${this.data.community}/posts/${this.id}`)});
     } );
+
+    
 
     divPostBtm.append(btn);
 
@@ -208,22 +214,29 @@ class PostView {
   }
 
   renderComments(divPosts, data) {
+    let div = document.createElement("div");
+    div.classList.add("divComments");
     for (let comment in data) {
-      let div = document.createElement("div");
-      div.classList.add("divExt");
-
+      
+      let divEachComment=document.createElement("div");
       let divInfo = document.createElement("div");
-      divInfo.style.wordBreak="break-word";
-      let pAuthor = document.createElement("p");
-      pAuthor.innerHTML = data[comment].user;
+      divInfo.style="wordBreak:break-word;padding:10px";
+      let spanAuthor = document.createElement("span");
+      spanAuthor.innerHTML = data[comment].user;
+      let spanDate=document.createElement("span")
+      spanDate.innerHTML=data[comment].date;
+      spanDate.classList.add("spanDate")
       let pComm = document.createElement("p");
+      pComm.style="margin-left:1%;margin-top:1%;";
       pComm.innerHTML = data[comment].comment;
 
-      divInfo.append(pAuthor);
+      divInfo.append(spanAuthor);
+      divInfo.append(spanDate);
       divInfo.append(pComm);
-      div.append(divInfo);
-      divPosts.append(div);
+      divEachComment.append(divInfo);
+      div.append(divEachComment);
     }
+    divPosts.append(div);
   }
 
   /*
