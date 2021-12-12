@@ -34,10 +34,11 @@ class PostView {
         }
       }
     } else if (this.type == "listInCommunity") {
+      /*GET USER Y MIRAR SI SeGUIX LA COMMUNITY*/
       let posts = this.data.posts;
       for (let post in posts) {
         posts[post].id = post;
-        await this.renderPost(divPosts, posts[post]);
+        this.renderPost(divPosts, posts[post]);
       }
     } else if ((this.type = "detail")) {
       this.renderPost(divPosts, this.data);
@@ -102,6 +103,7 @@ class PostView {
     mainContainer.append(divAsideRight);
   }
 
+  
 
   renderPost(container, postData) {
 

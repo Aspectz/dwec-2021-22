@@ -34,7 +34,6 @@ class PostCreateView {
 
     let select = document.querySelector("#communitySelect");
 
-    console.log(this.data);
     this.data.forEach((community) => {
       let opt = document.createElement("option");
       opt.innerHTML = community;

@@ -15,6 +15,9 @@ class Router {
   }
 
   getRoutes() {
+
+    console.log(this.route);
+
     if (/^#\/communities\/[0-9a-zA-Z]+\/posts\//.test(this.route)) {
       let url = this.route.substring(1);
       let id = url.substring(url.length, url.lastIndexOf("/") + 1);
@@ -52,7 +55,6 @@ class Router {
           break;
 
         case "#/create_post":
-          console.log("create post");
           let createPost = new PostCreation();
           createPost.render(app.container);
           break;

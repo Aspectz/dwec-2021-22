@@ -7,8 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Router} from './router/routes.js';
 export {renderMenu}
 (()=>{
-    //Detect reload
-
 
     window.app={}
 
