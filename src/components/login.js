@@ -85,9 +85,7 @@ class Login {
         localStorage.setItem("localId", datos.localId);
         localStorage.setItem("email", datos.email);
         localStorage.setItem("nickname", datos.displayName);
-        
         renderMenu();
-      
         new Router("#/");
       })
       .catch((error) => {

@@ -1,6 +1,7 @@
 export { Register };
-import {Router} from '../router/routes.js';
-import {renderMenu} from '../scripts.js';
+  import { log } from "mocha/mocha-es2018";
+import { Router } from "../router/routes.js";
+import { renderMenu } from "../scripts.js";
 class Register {
   constructor() {
     this.container = app.container;
@@ -21,10 +22,10 @@ class Register {
                     </div>
                       <!-- Email input -->
                       <div class="form-outline mb-4">
-                      <label class="form-label" for="email">Email address</label>
+                      <label class="form-label" for="email"> Email address</label>
                         <input type="email" name="email" class="form-control form-control-lg"
                           placeholder="Enter a valid email address" />
-                       
+                          <div id="emailerror"></div>
                       </div>
             
                       <!-- Password input -->
@@ -57,36 +58,27 @@ class Register {
     });
   }
 
-  async registerSubmit(event) {
-    event.preventDefault();
-    let creado = false;
-    let passwd1 = document.getElementById("password");
-    let passwd2 = document.getElementById("password2");
-    let nickname = document.getElementById("nickname");
-    if (passwd1.value != passwd2.value) {
-      document.querySelector("#passwordLabel").innerHTML =
-        "Las contraseñas deben coincidir";
-      return;
-    }
-    //Check nickname
+  async checkNickName() {
+    console.log("checking nickname");
     let resp = await fetch(
       "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users.json"
     );
     let data = await resp.json();
+
     if (data != null) {
       let users = Object.entries(data);
       users.map((p) => {
         if (p[1].nickname == nickname.value) {
           document.querySelector("#nickerror").innerHTML = "Usuario ya creado";
-          creado = true;
-          return;
+          data=null;
         }
       });
     }
+    return data;
+  }
 
-    if (creado) return;
-
-    //Create user
+  async createUser(data) {
+    console.log("Creating user");
     let datosFormData = new FormData(document.querySelector("#form_register"));
     let objecteFormData = Object.fromEntries(datosFormData);
     delete objecteFormData.password2;
@@ -118,32 +110,55 @@ class Register {
         localStorage.setItem("email", data.email);
         localStorage.setItem("nickname", data.displayName);
 
-        //Registrar usuario bda
-        let userFormData = Object.fromEntries(datosFormData);
-        delete userFormData.password2;
-        delete userFormData.password;
-        let userDatos = JSON.stringify(userFormData);
-
-        fetch(
-          `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${data.localId}/.json`,
-          {
-            method: "put",
-            headers: {
-              "Content-type": "application/json;charset=UTF-8",
-            },
-            body: userDatos,
-          }
-        )
-          .then((response) => {
-            return response.json();
-          })
-          .then(() => {
-            renderMenu();
-            new Router("#/");
-          });
+        this.registerToDB(datosFormData,data);
       })
       .catch((error) => {
         console.error("Error;", error);
+        document.querySelector("#emailerror").innerHTML =
+        error;
       });
+  }
+
+  async registerToDB(datosFormData,data) {
+    console.log("Registering");
+    //Registrar usuario bda
+    let userFormData = Object.fromEntries(datosFormData);
+    delete userFormData.password2;
+    delete userFormData.password;
+    let userDatos = JSON.stringify(userFormData);
+
+    fetch(
+      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${data.localId}/.json`,
+      {
+        method: "put",
+        headers: {
+          "Content-type": "application/json;charset=UTF-8",
+        },
+        body: userDatos,
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then(() => {
+        renderMenu();
+        new Router("#/");
+      });
+  }
+
+  async registerSubmit(event) {
+    event.preventDefault();
+
+    console.log("a");
+
+    let passwd1 = document.getElementById("password");
+    let passwd2 = document.getElementById("password2");
+    if (passwd1.value != passwd2.value) {
+      document.querySelector("#passwordLabel").innerHTML =
+        "Las contraseñas deben coincidir";
+      return;
+    }
+    //Check nickname
+    if (await this.checkNickName()!=null) this.createUser();
   }
 }
