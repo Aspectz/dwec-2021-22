@@ -5,6 +5,8 @@ class Menu {
     this.opcion = opcion;
   }
 
+
+
   getMenu() {
     document.querySelector("#menu").innerHTML=`<div class="menu-bar">
     <h2 class="logo">Proyecto</h1>
@@ -22,8 +24,7 @@ class Menu {
       } <i class="fas fa-caret-down"></i></a>
           <div class="dropdown-menu">
               <ul>
-                <li><a href="#">Create Community</a></li>
-                <li><a href="#">Portfolio</a></li>
+                <li><a href="#/create_community">Create Community</a></li>
                 <li>
                   <a href="#">Profile </a>
                 </li>
@@ -36,8 +37,7 @@ class Menu {
     <input type="text" placeholder="Search.." id="searchbox">
     <li><a id="register_link" href="#/register">Register</a></li>
     <li><a id="login_link" href="#/login">Log In</a>
-    </li>
-    <li><a href="#">Contact us</a></li>`
+    </li>`
       }
     </ul>`;
   }

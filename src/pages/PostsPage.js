@@ -14,17 +14,7 @@ class PostsPage{
             new PostView(container,"list"));
     }
      async getUrl(){
-      //  if(localStorage.getItem('nickname')==null){
             return "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities.json";
-      /*  }else{
-            let getCommunities = await fetch(
-               `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem("localId")}/communities.json`
-              );
-              let communities=await getCommunities.json()
-              console.log(communities);
-              return `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${communities}.json`;  
-              
-        }*/
 
 
     }

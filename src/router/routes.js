@@ -7,7 +7,7 @@ import { renderMenu } from "../scripts.js";
 import { PostDetails } from "../pages/PostDetails.js";
 import { PostCreation } from "../pages/PostCreation.js";
 import { CommunityPostList } from "../pages/CommunityPostList.js";
-
+import {CommunityCreation} from "../pages/CommunityCreation.js";
 class Router {
   constructor(route) {
     this.route = route;
@@ -16,8 +16,7 @@ class Router {
 
   getRoutes() {
 
-    console.log(this.route);
-
+    //see posts of community
     if (/^#\/communities\/[0-9a-zA-Z]+\/posts\//.test(this.route)) {
       let url = this.route.substring(1);
       let id = url.substring(url.length, url.lastIndexOf("/") + 1);
@@ -58,6 +57,9 @@ class Router {
           let createPost = new PostCreation();
           createPost.render(app.container);
           break;
+        case "#/create_community":
+          let createCommunity=new CommunityCreation();
+          createCommunity.render(app.container);
       }
     }
   }

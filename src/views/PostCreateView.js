@@ -1,5 +1,6 @@
 export { PostCreateView };
 import {Router} from '../router/routes.js';
+import '../css/createPost.css';
 class PostCreateView {
   constructor(cont) {
     this.container = cont;
@@ -33,6 +34,8 @@ class PostCreateView {
       .addEventListener("click", () => getData());
 
     let select = document.querySelector("#communitySelect");
+
+    console.log(this.data);
 
     this.data.forEach((community) => {
       let opt = document.createElement("option");

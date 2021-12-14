@@ -1,6 +1,7 @@
 import { Controller } from "../controller/Controller.js";
 import { Model } from "../models/Model.js";
 import {PostCreateView} from '../views/PostCreateView.js'
+
 export{PostCreation}
 class PostCreation{
 

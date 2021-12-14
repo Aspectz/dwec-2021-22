@@ -12,13 +12,9 @@ export {renderMenu}
 
     document.addEventListener("DOMContentLoaded",function(){
         app.container=document.querySelector("#container");
-
         new Router(window.location.hash);
         renderMenu();
-
     });
-
-
     window.addEventListener("hashchange",()=>{
         new Router(window.location.hash);
     });    
