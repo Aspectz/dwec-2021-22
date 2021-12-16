@@ -1,16 +1,18 @@
 import { Router } from "../router/routes";
+import { View } from "./views";
 
 export { PostView };
 
-class PostView {
+class PostView extends View{
   constructor(cont, type,id) {
-    this.container = cont;
+    super(cont);
     this.type = type;
     this.id=id;
   }
 
   async renderItem(Item) {
     this.data = Item;
+    //console.log(this.data);
     this.container.innerHTML = "";
 
     let mainContainer = document.createElement("div");
@@ -25,7 +27,7 @@ class PostView {
     
 
     if (this.type == "list") {
-      this.getAside(mainContainer);
+     // this.getAside(mainContainer);
       for (let commun in this.data) {
         let posts = this.data[commun].posts;
          for (let post in posts) {
@@ -35,14 +37,17 @@ class PostView {
        }
     } else if (this.type == "listInCommunity") {
       /*GET USER Y MIRAR SI SeGUIX LA COMMUNITY*/
-      let posts = this.data.posts;
+      //Object destructuring
+      const {posts}=this.data;
+  
       for (let post in posts) {
         posts[post].id = post;
         this.renderPost(divPosts, posts[post]);
       }
     } else if ((this.type = "detail")) {
       this.renderPost(divPosts, this.data);
-      this.renderComments(divPosts, this.data.comments);
+      const {comments} = this.data;
+      this.renderComments(divPosts, comments);
     }
 
     this.container.append(mainContainer);

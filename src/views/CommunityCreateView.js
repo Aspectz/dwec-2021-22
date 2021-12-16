@@ -2,9 +2,13 @@ export { CommunityCreateView };
 import { log } from "mocha/mocha-es2018";
 import "../css/createPost.css";
 import { Router } from "../router/routes.js";
-class CommunityCreateView {
+import { View } from "./views";
+
+
+
+class CommunityCreateView extends View {
   constructor(cont) {
-    this.container = cont;
+    super(cont);
   }
 
   renderItem(Item) {
@@ -37,9 +41,7 @@ class CommunityCreateView {
   checkCommunityExists() {
     let communities = Object.values(this.data);
     let name = document.querySelector("#communityName").value;
-    let sameCommunities = communities.filter(
-      (community) => community.name == name
-    );
+    let sameCommunities = communities.filter( (community) => community.name == name);
 
     return sameCommunities.length;
   }

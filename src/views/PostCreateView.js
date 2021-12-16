@@ -1,9 +1,11 @@
 export { PostCreateView };
 import {Router} from '../router/routes.js';
 import '../css/createPost.css';
-class PostCreateView {
+import { View } from './views.js';
+
+class PostCreateView extends View{
   constructor(cont) {
-    this.container = cont;
+    super(cont);
   }
 
   renderItem(Item) {
@@ -35,7 +37,6 @@ class PostCreateView {
 
     let select = document.querySelector("#communitySelect");
 
-    console.log(this.data);
 
     this.data.forEach((community) => {
       let opt = document.createElement("option");
