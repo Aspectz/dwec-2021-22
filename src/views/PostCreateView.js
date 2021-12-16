@@ -2,6 +2,7 @@ export { PostCreateView };
 import {Router} from '../router/routes.js';
 import '../css/createPost.css';
 import { View } from './views.js';
+import { fromEvent } from "rxjs";
 
 class PostCreateView extends View{
   constructor(cont) {
@@ -31,9 +32,8 @@ class PostCreateView extends View{
     document.querySelector("#formFile").addEventListener("change", function () {
       encodeImageFileAsURL(this);
     });
-    document
-      .querySelector("#submit")
-      .addEventListener("click", () => getData());
+    const submitObs=fromEvent(document.querySelector("#submit"),"click");
+    submitObs.subscribe(()=>{ getData() })
 
     let select = document.querySelector("#communitySelect");
 

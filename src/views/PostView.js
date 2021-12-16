@@ -1,14 +1,15 @@
 import { doc, log } from "mocha/mocha-es2018";
 import { Router } from "../router/routes";
 import { View } from "./views";
+import { fromEvent } from "rxjs";
 
 export { PostView };
 
-class PostView extends View{
-  constructor(cont, type,id) {
+class PostView extends View {
+  constructor(cont, type, id) {
     super(cont);
     this.type = type;
-    this.id=id;
+    this.id = id;
   }
 
   async renderItem(Item) {
@@ -20,42 +21,30 @@ class PostView extends View{
     mainContainer.classList.add("mainContainer");
     //Container where all posts are showed to user
 
-
-
-
     let divPosts = document.createElement("div");
     divPosts.classList.add("containerPosts");
     //Right Aside bar
 
     mainContainer.append(divPosts);
-    
-
-
 
     if (this.type == "list") {
-     // this.getAside(mainContainer);
+      // this.getAside(mainContainer);
       for (let commun in this.data) {
         let posts = this.data[commun].posts;
-         for (let post in posts) {
-           posts[post].id = post;
-           await this.renderPost(divPosts, posts[post]);
-         }
-       }
+        for (let post in posts) {
+          posts[post].id = post;
+          await this.renderPost(divPosts, posts[post]);
+        }
+      }
     } else if (this.type == "listInCommunity") {
       /*GET USER Y MIRAR SI SeGUIX LA COMMUNITY*/
       //Object destructuring
 
+      let communityList = await this.getUserCommunities();
 
-      let communityList=await this.getUserCommunities();
+      this.getMsgfollowUnfollowCommunity(communityList, divPosts);
 
-
-
-      this.getMsgfollowUnfollowCommunity(communityList,divPosts);
-
-
-
-      const {posts}=this.data;
-  
+      const { posts } = this.data;
 
       for (let post in posts) {
         posts[post].id = post;
@@ -63,8 +52,8 @@ class PostView extends View{
       }
     } else if ((this.type = "detail")) {
       this.renderPost(divPosts, this.data);
-      const {comments} = this.data;
-      if(comments!=null) this.renderComments(divPosts, comments);
+      const { comments } = this.data;
+      if (comments != null) this.renderComments(divPosts, comments);
     }
 
     this.container.append(mainContainer);
@@ -81,39 +70,48 @@ class PostView extends View{
     divFormNewComment.append(formComment);
     divPostBtm.append(divFormNewComment);
 
-    let btn=document.createElement("button");
-    btn.innerHTML="Comment";
-    btn.disabled=true;
-    btn.className=("btn btn-primary");
-    textArea.addEventListener("input",()=>{
-      if(textArea.value.length>0) btn.disabled=false;
-      else btn.disabled=true;
+    let btn = document.createElement("button");
+    btn.innerHTML = "Comment";
+    btn.disabled = true;
+    btn.className = "btn btn-primary";
+
+    const submitObs = fromEvent(textArea, "input");
+    submitObs.subscribe(() => {
+      if (textArea.value.length > 0) btn.disabled = false;
+      else btn.disabled = true;
+    });
+    
+    btn.addEventListener("click", async () => {
+      let date = new Date();
+      let dateFormat = [
+        date.getDate(),
+        date.getMonth() + 1,
+        date.getFullYear(),
+      ].join("/");
+
+      let comment = textArea.value;
+      let user = localStorage.getItem("nickname");
+      let commentBody = { user: user, comment: comment, date: dateFormat };
+      let sendComment = fetch(
+        `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${
+          this.data.community
+        }/posts/${this.id}/comments.json?auth=${localStorage.getItem(
+          "IDToken"
+        )}`,
+        {
+          method: "post",
+          headers: {
+            "Content-type": "application/json;charset=UTF-8",
+          },
+          body: JSON.stringify(commentBody),
+        }
+      );
+      sendComment.then(() => {
+        new Router(`#/communities/${this.data.community}/posts/${this.id}`);
+      });
     });
 
-    btn.addEventListener("click",async ()=>{
-
-      let date = new Date();
-      let dateFormat =
-            [date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/");
-
-      let comment=textArea.value;
-      let user=localStorage.getItem("nickname");
-      let commentBody={ "user" : user , "comment":comment , "date":dateFormat}
-       let sendComment=fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.data.community}/posts/${this.id}/comments.json?auth=${localStorage.getItem("IDToken")}`,
-      {
-        method: "post",
-        headers: {
-          "Content-type": "application/json;charset=UTF-8",
-        },
-        body: JSON.stringify(commentBody),
-      }); 
-      sendComment.then( ()=>{ new Router(`#/communities/${this.data.community}/posts/${this.id}`)});
-    } );
-
-    
-
     divPostBtm.append(btn);
-
   }
 
   getAside(mainContainer) {
@@ -125,12 +123,8 @@ class PostView extends View{
     mainContainer.append(divAsideRight);
   }
 
-  
-
   renderPost(container, postData) {
-
-
-  //  console.log(postData);
+    //  console.log(postData);
 
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
@@ -205,7 +199,8 @@ class PostView extends View{
 
     if (this.type == "detail") {
       divPostBottom.classList.remove("divCommentsBtn");
-      if(localStorage.getItem("nickname")!=null)this.getCommentBox(divPostBottom);
+      if (localStorage.getItem("nickname") != null)
+        this.getCommentBox(divPostBottom);
     }
 
     //Appends
@@ -221,97 +216,97 @@ class PostView extends View{
     upVote.addEventListener("click", () => {
       this.vote("upvoted");
     });
+
     downVote.addEventListener("click", () => {
       this.vote("downvoted");
     });
   }
 
-  renderComments(divPosts, data) {  
+  renderComments(divPosts, data) {
+    let div = document.createElement("div");
+    div.classList.add("divComments");
+    let comments = Object.values(data);
 
-      let div = document.createElement("div");
-      div.classList.add("divComments");
-      let comments=Object.values(data);      
+    comments.map((comment) => {
+      let divEachComment = document.createElement("div");
+      let divInfo = document.createElement("div");
+      divInfo.style = "wordBreak:break-word;padding:10px";
+      let spanAuthor = document.createElement("span");
+      spanAuthor.innerHTML = comment.user;
+      let spanDate = document.createElement("span");
+      spanDate.innerHTML = comment.date;
+      spanDate.classList.add("spanDate");
+      let pComm = document.createElement("p");
+      pComm.style = "margin-left:1%;margin-top:1%;";
+      pComm.innerHTML = comment.comment;
 
-      comments.map( (comment) =>{
-        let divEachComment=document.createElement("div");
-        let divInfo = document.createElement("div");
-        divInfo.style="wordBreak:break-word;padding:10px";
-        let spanAuthor = document.createElement("span");
-        spanAuthor.innerHTML = comment.user;
-        let spanDate=document.createElement("span")
-        spanDate.innerHTML=comment.date;
-        spanDate.classList.add("spanDate")
-        let pComm = document.createElement("p");
-        pComm.style="margin-left:1%;margin-top:1%;";
-        pComm.innerHTML = comment.comment;
-
-        divInfo.append(spanAuthor);
-        divInfo.append(spanDate);
-        divInfo.append(pComm);
-        divEachComment.append(divInfo);
-        div.append(divEachComment);  
-        divPosts.append(div);
-      });
-   
+      divInfo.append(spanAuthor);
+      divInfo.append(spanDate);
+      divInfo.append(pComm);
+      divEachComment.append(divInfo);
+      div.append(divEachComment);
+      divPosts.append(div);
+    });
   }
-  async getUserCommunities(){
-    
-    let resp=await fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem('localId')}.json`);
+  async getUserCommunities() {
+    let resp = await fetch(
+      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem(
+        "localId"
+      )}.json`
+    );
 
-    let respJson=await resp.json();
-
+    let respJson = await resp.json();
 
     return respJson;
   }
 
-  getMsgfollowUnfollowCommunity(communitiesList,divPosts){
-    
-    let buttonFollow=document.createElement("button");
-    buttonFollow.className="btn btn-primary";
-    buttonFollow.style.margin="0px 10px 10px 0px";
-    
-
-
+  getMsgfollowUnfollowCommunity(communitiesList, divPosts) {
+    let buttonFollow = document.createElement("button");
+    buttonFollow.className = "btn btn-primary";
+    buttonFollow.style.margin = "0px 10px 10px 0px";
 
     divPosts.append(buttonFollow);
-    if(communitiesList.communities!=null){
-      
-     
-      let followIt=Object.values(communitiesList.communities).filter((communityName) => communityName == this.data.name );
-      
-      
+    if (communitiesList.communities != null) {
+      let followIt = Object.values(communitiesList.communities).filter(
+        (communityName) => communityName == this.data.name
+      );
 
-      if(followIt.length>0){
-        buttonFollow.innerHTML="UnFollow this community";
-        buttonFollow.value="unfollow";
-      }else{
-        buttonFollow.innerHTML="Follow this community";
-        buttonFollow.value="follow";
+      if (followIt.length > 0) {
+        buttonFollow.innerHTML = "UnFollow this community";
+        buttonFollow.value = "unfollow";
+      } else {
+        buttonFollow.innerHTML = "Follow this community";
+        buttonFollow.value = "follow";
       }
-    }else{
-      buttonFollow.innerHTML="Follow this community";
+    } else {
+      buttonFollow.innerHTML = "Follow this community";
     }
-    buttonFollow.addEventListener("click",()=>{
-      if(buttonFollow.value=="unfollow"){
+    const miObservable = fromEvent(buttonFollow, "click");
+    miObservable.subscribe((event) => {
+      if (buttonFollow.value == "unfollow") {
         this.followOrUnfollow("delete");
-      }else{
-        this.followOrUnfollow("put",this.data.name);
+      } else {
+        this.followOrUnfollow("put", this.data.name);
       }
     });
   }
 
-  followOrUnfollow(option,value){
-    fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem("localId")}/communities/${this.data.name}.json?auth=${localStorage.getItem("IDToken")}`, {
-      method: option,
-      headers: { "Content-type": "application/json; charset=UTF-8" },
-      body: JSON.stringify(value),
-     })
+  followOrUnfollow(option, value) {
+    fetch(
+      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem(
+        "localId"
+      )}/communities/${this.data.name}.json?auth=${localStorage.getItem(
+        "IDToken"
+      )}`,
+      {
+        method: option,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+        body: JSON.stringify(value),
+      }
+    )
       .then((response) => response.json())
       .then((datos) => {
         new Router(`#/communities/${this.data.name}`);
       });
   }
-
-
-
 }
