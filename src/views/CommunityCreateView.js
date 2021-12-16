@@ -48,12 +48,12 @@ class CommunityCreateView extends View {
 
   fetchCommunity() {
     let name = document.querySelector("#communityName").value;
-    let newCommunity = { name: name };
+    let newCommunity = { "name" : name };
 
     let fetchJson = fetch(
-      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities.json`,
+      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${name}.json?auth=${localStorage.getItem("IDToken")}`,
       {
-        method: "post",
+        method: "put",
         headers: { "Content-type": "application/json; charset=UTF-8" },
         body: JSON.stringify(newCommunity),
       }
@@ -62,7 +62,16 @@ class CommunityCreateView extends View {
     fetchJson
       .then((resp) => resp.json())
       .then(() => {
-        new Router("#/");
+        //Add  community to user
+        console.log(localStorage.getItem("IDToken"));
+        let fetchCommUser = fetch(
+          `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem("localId")}/communities/${name}.json?auth=${localStorage.getItem("IDToken")}`,
+          {
+            method: "put",
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+            body: JSON.stringify(name),
+          }
+        ).then((resp)=>resp.json()).then(new Router("#/"));
       });
   }
 }

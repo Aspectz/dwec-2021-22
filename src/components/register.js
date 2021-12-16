@@ -106,10 +106,13 @@ class Register {
         }
       })
       .then((data) => {
+
+        console.log(data);
+
         localStorage.setItem("localId", data.localId);
         localStorage.setItem("email", data.email);
         localStorage.setItem("nickname", data.displayName);
-
+        localStorage.setItem("IDToken",data.idToken)
         this.registerToDB(datosFormData,data);
       })
       .catch((error) => {
@@ -128,7 +131,7 @@ class Register {
     let userDatos = JSON.stringify(userFormData);
 
     fetch(
-      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${data.localId}/.json`,
+      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${data.localId}/.json?auth=${localStorage.getItem("IDToken")}`,
       {
         method: "put",
         headers: {

@@ -1,3 +1,4 @@
+import { doc, log } from "mocha/mocha-es2018";
 import { Router } from "../router/routes";
 import { View } from "./views";
 
@@ -19,12 +20,17 @@ class PostView extends View{
     mainContainer.classList.add("mainContainer");
     //Container where all posts are showed to user
 
+
+
+
     let divPosts = document.createElement("div");
     divPosts.classList.add("containerPosts");
     //Right Aside bar
 
     mainContainer.append(divPosts);
     
+
+
 
     if (this.type == "list") {
      // this.getAside(mainContainer);
@@ -38,8 +44,19 @@ class PostView extends View{
     } else if (this.type == "listInCommunity") {
       /*GET USER Y MIRAR SI SeGUIX LA COMMUNITY*/
       //Object destructuring
+
+
+      let communityList=await this.getUserCommunities();
+
+
+
+      this.getMsgfollowUnfollowCommunity(communityList,divPosts);
+
+
+
       const {posts}=this.data;
   
+
       for (let post in posts) {
         posts[post].id = post;
         this.renderPost(divPosts, posts[post]);
@@ -47,7 +64,7 @@ class PostView extends View{
     } else if ((this.type = "detail")) {
       this.renderPost(divPosts, this.data);
       const {comments} = this.data;
-      this.renderComments(divPosts, comments);
+      if(comments!=null) this.renderComments(divPosts, comments);
     }
 
     this.container.append(mainContainer);
@@ -82,7 +99,7 @@ class PostView extends View{
       let comment=textArea.value;
       let user=localStorage.getItem("nickname");
       let commentBody={ "user" : user , "comment":comment , "date":dateFormat}
-       let sendComment=fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.data.community}/posts/${this.id}/comments.json`,
+       let sendComment=fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${this.data.community}/posts/${this.id}/comments.json?auth=${localStorage.getItem("IDToken")}`,
       {
         method: "post",
         headers: {
@@ -111,6 +128,9 @@ class PostView extends View{
   
 
   renderPost(container, postData) {
+
+
+  //  console.log(postData);
 
     let divExt = document.createElement("div");
     divExt.classList.add("divExt");
@@ -206,31 +226,92 @@ class PostView extends View{
     });
   }
 
-  renderComments(divPosts, data) {
-    let div = document.createElement("div");
-    div.classList.add("divComments");
-    let comments=Object.values(data);      
+  renderComments(divPosts, data) {  
 
-    comments.map( (comment) =>{
-      let divEachComment=document.createElement("div");
-      let divInfo = document.createElement("div");
-      divInfo.style="wordBreak:break-word;padding:10px";
-      let spanAuthor = document.createElement("span");
-      spanAuthor.innerHTML = comment.user;
-      let spanDate=document.createElement("span")
-      spanDate.innerHTML=comment.date;
-      spanDate.classList.add("spanDate")
-      let pComm = document.createElement("p");
-      pComm.style="margin-left:1%;margin-top:1%;";
-      pComm.innerHTML = comment.comment;
+      let div = document.createElement("div");
+      div.classList.add("divComments");
+      let comments=Object.values(data);      
 
-      divInfo.append(spanAuthor);
-      divInfo.append(spanDate);
-      divInfo.append(pComm);
-      divEachComment.append(divInfo);
-      div.append(divEachComment);  
-    });
-    divPosts.append(div);
+      comments.map( (comment) =>{
+        let divEachComment=document.createElement("div");
+        let divInfo = document.createElement("div");
+        divInfo.style="wordBreak:break-word;padding:10px";
+        let spanAuthor = document.createElement("span");
+        spanAuthor.innerHTML = comment.user;
+        let spanDate=document.createElement("span")
+        spanDate.innerHTML=comment.date;
+        spanDate.classList.add("spanDate")
+        let pComm = document.createElement("p");
+        pComm.style="margin-left:1%;margin-top:1%;";
+        pComm.innerHTML = comment.comment;
+
+        divInfo.append(spanAuthor);
+        divInfo.append(spanDate);
+        divInfo.append(pComm);
+        divEachComment.append(divInfo);
+        div.append(divEachComment);  
+        divPosts.append(div);
+      });
+   
   }
+  async getUserCommunities(){
+    
+    let resp=await fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem('localId')}.json`);
+
+    let respJson=await resp.json();
+
+
+    return respJson;
+  }
+
+  getMsgfollowUnfollowCommunity(communitiesList,divPosts){
+    
+    let buttonFollow=document.createElement("button");
+    buttonFollow.className="btn btn-primary";
+    buttonFollow.style.margin="0px 10px 10px 0px";
+    
+
+
+
+    divPosts.append(buttonFollow);
+    if(communitiesList.communities!=null){
+      
+     
+      let followIt=Object.values(communitiesList.communities).filter((communityName) => communityName == this.data.name );
+      
+      
+
+      if(followIt.length>0){
+        buttonFollow.innerHTML="UnFollow this community";
+        buttonFollow.value="unfollow";
+      }else{
+        buttonFollow.innerHTML="Follow this community";
+        buttonFollow.value="follow";
+      }
+    }else{
+      buttonFollow.innerHTML="Follow this community";
+    }
+    buttonFollow.addEventListener("click",()=>{
+      if(buttonFollow.value=="unfollow"){
+        this.followOrUnfollow("delete");
+      }else{
+        this.followOrUnfollow("put",this.data.name);
+      }
+    });
+  }
+
+  followOrUnfollow(option,value){
+    fetch(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem("localId")}/communities/${this.data.name}.json?auth=${localStorage.getItem("IDToken")}`, {
+      method: option,
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+      body: JSON.stringify(value),
+     })
+      .then((response) => response.json())
+      .then((datos) => {
+        new Router(`#/communities/${this.data.name}`);
+      });
+  }
+
+
 
 }

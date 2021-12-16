@@ -9,7 +9,6 @@ class CommunityPostList{
     }
 
     async render(container){
-        console.log(container);
         let postList=new Controller(
 
             new Model(`https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/${this.url}.json`),

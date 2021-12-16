@@ -16,6 +16,7 @@ class Router {
 
   getRoutes() {
 
+    
     //see posts of community
     if (/^#\/communities\/[0-9a-zA-Z]+\/posts\//.test(this.route)) {
       let url = this.route.substring(1);

@@ -85,6 +85,7 @@ class Login {
         localStorage.setItem("localId", datos.localId);
         localStorage.setItem("email", datos.email);
         localStorage.setItem("nickname", datos.displayName);
+        localStorage.setItem("IDToken", datos.idToken);
         renderMenu();
         new Router("#/");
       })

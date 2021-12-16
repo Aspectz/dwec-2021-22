@@ -38,11 +38,17 @@ class PostCreateView extends View{
     let select = document.querySelector("#communitySelect");
 
 
-    this.data.forEach((community) => {
-      let opt = document.createElement("option");
-      opt.innerHTML = community;
-      select.append(opt);
-    });
+    if(this.data!=null){
+      let communities=Object.values(this.data);
+       communities.forEach((community) => {
+
+        let opt = document.createElement("option");
+        opt.innerHTML = community;
+        select.append(opt);
+      });
+    }
+
+    
   }
 }
 function encodeImageFileAsURL(element) {
@@ -60,22 +66,31 @@ function encodeImageFileAsURL(element) {
     formData.append("file", file);
 
     let community=document.querySelector("#communitySelect").value;
-    let newPost = {
-      community : community, 
-      author: localStorage.getItem("nickname"),
-      file: await uploadImage(formData),
-      title: document.querySelector("#title").value,
-      upvotes: "2",
-    };   
-
-    uploadPost(community,newPost);
-
+    
+      if(community!="Choose a community"){
+      let newPost = {
+        community : community, 
+        author: localStorage.getItem("nickname"),
+        file: await uploadImage(formData),
+        title: document.querySelector("#title").value,
+        upvotes: "2",
+      };   
+      
+      uploadPost(community,newPost);
+    }else{
+      let select = document.querySelector("#communitySelect");
+      let divSelect=select.parentElement;
+      let pErrorCom=document.createElement("p");
+      pErrorCom.style.color="white";
+      pErrorCom.innerHTML="Error choosing a community";
+      divSelect.append(pErrorCom);
+    }
 
   }
 
   async function uploadPost(community,newPost){
     fetch(
-      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${community}/posts.json`,
+      `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities/${community}/posts.json?auth=${localStorage.getItem("IDToken")}`,
      {
        method: "post",
        headers: { "Content-type": "application/json; charset=UTF-8" },

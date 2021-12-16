@@ -7,6 +7,9 @@
     padding: 10px;
     border:1px dotted rgba(255, 255, 255, 0.39);
 }
+.containerCreatePosts form > div{
+    margin: 10px;
+}
 .postNameDiv{
     border:1px solid white;
 }

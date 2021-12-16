@@ -14,7 +14,7 @@ class PostsPage{
             new PostView(container,"list"));
     }
      async getUrl(){
-            return "https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities.json";
+            return `https://projectjs-b6bfe-default-rtdb.europe-west1.firebasedatabase.app/communities.json`;
 
 
     }
