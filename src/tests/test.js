@@ -1,15 +1,13 @@
-import  'mocha/mocha.css';
+import "mocha/mocha.css";
 import mocha from "mocha/mocha-es2018";
-import chai  from  'chai';
+import chai, { assert } from "chai";
 
-var expect = chai.expect;
+import { checkNameisString } from "../views/CommunityCreateView";
 
 
-
-describe("String",function () {
-    it('should be a number ',function(){
-        expect(43).to.not.be.a('number');
-    });
+mocha.setup("bdd");
+it('Is a string ', function () {
+  assert.isString(checkNameisString());
 });
 
-
+mocha.run();

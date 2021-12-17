@@ -152,7 +152,6 @@ class Register {
   async registerSubmit(event) {
     event.preventDefault();
 
-    console.log("a");
 
     let passwd1 = document.getElementById("password");
     let passwd2 = document.getElementById("password2");

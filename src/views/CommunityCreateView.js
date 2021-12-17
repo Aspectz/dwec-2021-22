@@ -1,9 +1,20 @@
 export { CommunityCreateView };
-import { log } from "mocha/mocha-es2018";
+import { doc, log } from "mocha/mocha-es2018";
 import "../css/createPost.css";
+import "mocha/mocha.css";
+import mocha from "mocha/mocha-es2018";
+import "../tests/test";
+
 import { Router } from "../router/routes.js";
 import { View } from "./views";
 import { fromEvent } from "rxjs";
+
+export function checkNameisString(){
+  return "CommunityName";
+}
+
+
+
 
 class CommunityCreateView extends View {
   constructor(cont) {
@@ -37,6 +48,7 @@ class CommunityCreateView extends View {
         "This community already exists.";
     }
   }
+
 
   checkCommunityExists() {
     let communities = Object.values(this.data);
